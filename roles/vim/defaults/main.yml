@@ -1,5 +1,9 @@
 ---
 
+# Feature toggles — naming pattern: <rolename>_enable_<feature>
+
 vim_enable_vim_nox: true
+
 vim_enable_lua: true
+
 vim_enable_xclip: true

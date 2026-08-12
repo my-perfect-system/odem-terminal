@@ -1,9 +1,19 @@
 ---
 
+# Feature toggles — naming pattern: <rolename>_enable_<feature>
+
 nvim_enable_apt_deps: true
+
 nvim_enable_npm_tools: true
+
 nvim_enable_tarball: true
-nvim_yazi_version: "v26.5.6"
+
 nvim_enable_yazi: true
+
 nvim_enable_fd: true
+
 nvim_enable_tree_sitter: true
+
+# Regular configuration
+
+nvim_yazi_version: "v26.5.6"

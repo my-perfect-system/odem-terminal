@@ -1,3 +1,5 @@
 ---
 
+# Feature toggles — naming pattern: <rolename>_enable_<feature>
+
 kitty_enable_alternatives: true

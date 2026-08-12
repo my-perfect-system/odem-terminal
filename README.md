@@ -16,16 +16,16 @@ See [`galaxy.yml`](galaxy.yml) for the canonical values.
 
 | Role | Purpose |
 |---|---|
-| `mps.terminal.bash` | bash-completion, bash fun packages, system + per-user `.bashrc` and `.config/bashrc/`, legacy migration. |
-| `mps.terminal.vim` | vim-nox + addons, lua dev packages, per-user `.vimrc` + `.NERDTreeBookmarks`. |
-| `mps.terminal.nvim` | apt deps, upstream nvim tarball + symlink, npm tools, per-user python venv + pip + cargo, yazi. |
-| `mps.terminal.tmux` | tmux + tmuxinator, per-user config trees. |
-| `mps.terminal.kitty` | kitty package + `x-terminal-emulator` alternative + per-user `.config/kitty/`. |
-| `mps.terminal.fonts` | Download → unzip → copy font archives + `fc-cache`. |
-| `mps.terminal.python` | Per-user python venv with pip + linters, auto-activate in `.bashrc`. |
-| `mps.terminal.rust` | rustup install per user, default stable toolchain, PATH/env in `.bashrc`. |
-| `mps.terminal.scripts` | Per-user helper scripts in `~/.local/bin/`. |
-| `mps.terminal.skeletons` | System-wide `/etc/mps/skeletons/`. |
+| [`mps.terminal.bash`](roles/bash/README.md) | bash-completion, bash fun packages, system + per-user `.bashrc` and `.config/bashrc/`, legacy migration. |
+| [`mps.terminal.vim`](roles/vim/README.md) | vim-nox + addons, lua dev packages, per-user `.vimrc` + `.NERDTreeBookmarks`. |
+| [`mps.terminal.nvim`](roles/nvim/README.md) | apt deps, upstream nvim tarball + symlink, npm tools, per-user python venv + pip + cargo, yazi. |
+| [`mps.terminal.tmux`](roles/tmux/README.md) | tmux + tmuxinator, per-user config trees. |
+| [`mps.terminal.kitty`](roles/kitty/README.md) | kitty package + `x-terminal-emulator` alternative + per-user `.config/kitty/`. |
+| [`mps.terminal.fonts`](roles/fonts/README.md) | Download → unzip → copy font archives + `fc-cache`. |
+| [`mps.terminal.python`](roles/python/README.md) | Per-user python venv with pip + linters, auto-activate in `.bashrc`. |
+| [`mps.terminal.rust`](roles/rust/README.md) | rustup install per user, default stable toolchain, PATH/env in `.bashrc`. |
+| [`mps.terminal.scripts`](roles/scripts/README.md) | Per-user helper scripts in `~/.local/bin/`. |
+| [`mps.terminal.skeletons`](roles/skeletons/README.md) | System-wide `/etc/mps/skeletons/`. |
 
 ## Installation
 

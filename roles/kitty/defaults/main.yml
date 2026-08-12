@@ -2,4 +2,4 @@
 
 users_catalog: {}  # noqa var-naming[no-role-prefix]
 users_list: []  # noqa var-naming[no-role-prefix]
-kitty_install_alternatives: true
+kitty_enable_alternatives: true

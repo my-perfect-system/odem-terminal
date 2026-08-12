@@ -40,7 +40,7 @@
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
-  when: rust_toolchain_reinstall | bool
+  when: rust_enable_toolchain_reinstall | bool
 
 - name: "TERM_RUST_CONFIGURE - Set default rust toolchain"
   ansible.builtin.command:

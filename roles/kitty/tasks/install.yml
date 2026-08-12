@@ -9,4 +9,4 @@
     cmd: update-alternatives --set x-terminal-emulator /usr/bin/kitty
   changed_when: false
   failed_when: false
-  when: kitty_install_alternatives | bool
+  when: kitty_enable_alternatives | bool

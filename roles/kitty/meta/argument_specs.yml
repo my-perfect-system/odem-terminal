@@ -3,7 +3,7 @@ argument_specs:
   main:
     short_description: Configure kitty terminal emulator per user
     options:
-      kitty_install_alternatives:
+      kitty_enable_alternatives:
         type: bool
         required: false
         default: true

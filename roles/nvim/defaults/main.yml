@@ -2,10 +2,10 @@
 
 users_catalog: {}  # noqa var-naming[no-role-prefix]
 users_list: []  # noqa var-naming[no-role-prefix]
-nvim_install_apt_deps: true
-nvim_install_npm_tools: true
-nvim_install_tarball: true
+nvim_enable_apt_deps: true
+nvim_enable_npm_tools: true
+nvim_enable_tarball: true
 nvim_yazi_version: "v26.5.6"
-nvim_install_yazi: true
-nvim_install_fd: true
-nvim_install_tree_sitter: true
+nvim_enable_yazi: true
+nvim_enable_fd: true
+nvim_enable_tree_sitter: true

@@ -3,17 +3,22 @@ argument_specs:
   main:
     short_description: Configure bash dotfiles per user
     options:
-      bash_install_bash_completion:
+      bash_enable_bash_completion:
         type: bool
         required: false
         default: true
         description: "Install bash-completion package"
+      bash_enable_fun_packages:
+        type: bool
+        required: false
+        default: true
+        description: "Install bash_fun_packages (shell fun utilities)"
       bash_fun_packages:
         type: list
         required: false
         elements: str
         description: Apt packages providing shell fun utilities (cowsay, figlet, fortune, cmatrix, etc.)
-      bash_install_aliases:
+      bash_enable_aliases:
         type: bool
         required: false
         default: true

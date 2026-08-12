@@ -15,7 +15,7 @@
       - vim-syntastic
       - vim-youcompleteme
     state: present
-  when: vim_install_vim_nox | bool
+  when: vim_enable_vim_nox | bool
 
 - name: "TERM_VIM_INSTALL - Install lua packages"
   ansible.builtin.package:
@@ -25,10 +25,10 @@
       - lua5.1
       - lua5.3
     state: present
-  when: vim_install_lua | bool
+  when: vim_enable_lua | bool
 
 - name: "TERM_VIM_INSTALL - Install xclip"
   ansible.builtin.package:
     name: xclip
     state: present
-  when: vim_install_xclip | bool
+  when: vim_enable_xclip | bool

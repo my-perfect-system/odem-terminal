@@ -3,17 +3,17 @@ argument_specs:
   main:
     short_description: Configure vim dotfiles per user
     options:
-      vim_install_vim_nox:
+      vim_enable_vim_nox:
         type: bool
         required: false
         default: true
         description: "Install vim-nox and vim plugin packages"
-      vim_install_lua:
+      vim_enable_lua:
         type: bool
         required: false
         default: true
         description: "Install lua development packages"
-      vim_install_xclip:
+      vim_enable_xclip:
         type: bool
         required: false
         default: true

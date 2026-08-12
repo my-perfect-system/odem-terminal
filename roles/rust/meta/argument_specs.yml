@@ -13,7 +13,7 @@ argument_specs:
         required: false
         default: []
         description: "List of dicts with 'name' (catalog key) and 'state' (present/absent)."
-      rust_toolchain_reinstall:
+      rust_enable_toolchain_reinstall:
         type: bool
         required: false
         default: false

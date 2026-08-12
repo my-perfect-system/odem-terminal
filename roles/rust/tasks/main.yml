@@ -1,6 +1,108 @@
 ---
-- name: Install rust prerequisites
-  ansible.builtin.include_tasks: install.yml
+# System-level install
+- name: Install clang for cargo
+  ansible.builtin.package:
+    name: clang
+    state: present
 
-- name: Configure per-user rust toolchain
-  ansible.builtin.include_tasks: configure.yml
+- name: Ensure rustup tools directory exists
+  ansible.builtin.file:
+    path: /usr/share/mps/tools/rustup
+    state: directory
+    mode: "0755"
+
+- name: Download rustup installer
+  ansible.builtin.get_url:
+    url: https://sh.rustup.rs
+    dest: /usr/share/mps/tools/rustup/rustup.sh
+    mode: "0755"
+
+# Per-user configure
+- name: Ensure per-user .rustup directory exists
+  ansible.builtin.file:
+    path: "{{ entity.home }}/.rustup"
+    state: directory
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0700"
+  loop: "{{ identity_users_resolved | mps_filter_users('terminal_rust') }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: Ensure per-user .cargo directory exists
+  ansible.builtin.file:
+    path: "{{ entity.home }}/.cargo"
+    state: directory
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0700"
+  loop: "{{ identity_users_resolved | mps_filter_users('terminal_rust') }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: Install rustup per user
+  ansible.builtin.command:
+    cmd: sudo -u {{ entity.name }} /usr/share/mps/tools/rustup/rustup.sh -y --no-modify-path
+    creates: "{{ entity.home }}/.cargo/bin/rustc"
+  loop: "{{ identity_users_resolved | mps_filter_users('terminal_rust') }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: Remove per-user toolchains for clean reinstall
+  ansible.builtin.file:
+    path: "{{ entity.home }}/.rustup/toolchains"
+    state: absent
+  loop: "{{ identity_users_resolved | mps_filter_users('terminal_rust') }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+  when: rust_enable_toolchain_reinstall | bool
+
+- name: Set rustup default toolchain to stable
+  ansible.builtin.command:
+    cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/rustup" default stable
+    changed_when: false
+  loop: "{{ identity_users_resolved | mps_filter_users('terminal_rust') }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: Add cargo/bin to PATH in .bashrc
+  ansible.builtin.lineinfile:
+    path: "{{ entity.home }}/.bashrc"
+    line: 'export PATH="$PATH:$HOME/.cargo/bin"'
+    insertbefore: EOF
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0600"
+  loop: "{{ identity_users_resolved | mps_filter_users('terminal_rust') }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: Source cargo env in .bashrc
+  ansible.builtin.lineinfile:
+    path: "{{ entity.home }}/.bashrc"
+    line: 'source "$HOME/.cargo/env"'
+    insertbefore: EOF
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0600"
+  loop: "{{ identity_users_resolved | mps_filter_users('terminal_rust') }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: Ensure .rustup and .cargo directories have correct ownership
+  ansible.builtin.file:
+    path: "{{ item.0.home }}/{{ item.1 }}"
+    state: directory
+    owner: "{{ item.0.name }}"
+    group: "{{ item.0.group | default(item.0.name) }}"
+    recurse: true
+  loop: "{{ identity_users_present | product(['.rustup', '.cargo']) | list }}"
+  loop_control:
+    label: "{{ item.0.name }}/{{ item.1 }}"

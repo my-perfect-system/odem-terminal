@@ -1,8 +1,0 @@
----
-- name: Install python3 base packages
-  ansible.builtin.package:
-    name:
-      - python3
-      - python3-venv
-      - python3-packaging
-    state: present

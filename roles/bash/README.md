@@ -1,10 +1,10 @@
 ---
-namespace: mps
+namespace: odem
 collection: terminal
 role: bash
 ---
 
-# `mps.terminal.bash`
+# `odem.terminal.bash`
 
 Configure bash dotfiles per user
 
@@ -19,14 +19,14 @@ Configure bash dotfiles per user
 
 ## Dependencies
 
-- `mps.base.identity`
+- `odem.base.identity`
 
 ## Example usage
 
 ```yaml
 - hosts: all
   roles:
-    - mps.terminal.bash
+    - odem.terminal.bash
 ```
 
 ## Role metadata

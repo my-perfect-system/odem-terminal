@@ -87,7 +87,7 @@
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0700"
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -96,7 +96,7 @@
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} python3 -m venv "{{ entity.home }}/.venvs/nvim"
     creates: "{{ entity.home }}/.venvs/nvim"
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -105,7 +105,7 @@
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.venvs/nvim/bin/pip" install ruff-lsp debugpy pynvim
     creates: "{{ entity.home }}/.venvs/nvim/bin/ruff-lsp"
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -118,7 +118,7 @@
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
     directory_mode: "0700"
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -130,7 +130,7 @@
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0700"
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -195,7 +195,7 @@
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/cargo" install --locked fd-find
     creates: "{{ entity.home }}/.cargo/bin/fd"
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -205,7 +205,7 @@
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/cargo" install --locked tree-sitter-cli
     creates: "{{ entity.home }}/.cargo/bin/tree-sitter"
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"

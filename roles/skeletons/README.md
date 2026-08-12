@@ -1,23 +1,23 @@
 ---
-namespace: mps
+namespace: odem
 collection: terminal
 role: skeletons
 ---
 
-# `mps.terminal.skeletons`
+# `odem.terminal.skeletons`
 
 Deploy per-user project skeleton templates to ~/.config/skeletons
 
 ## Dependencies
 
-- `mps.base.identity`
+- `odem.base.identity`
 
 ## Example usage
 
 ```yaml
 - hosts: all
   roles:
-    - mps.terminal.skeletons
+    - odem.terminal.skeletons
 ```
 
 ## Role metadata

@@ -15,6 +15,6 @@ galaxy_info:
     - terminal
     - nvim
     - neovim
-    - mps-terminal
+    - odem-terminal
 dependencies:
-  - role: mps.base.identity
+  - role: odem.base.identity

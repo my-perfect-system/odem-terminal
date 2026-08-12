@@ -1,23 +1,23 @@
 ---
-namespace: mps
+namespace: odem
 collection: terminal
 role: scripts
 ---
 
-# `mps.terminal.scripts`
+# `odem.terminal.scripts`
 
 Deploy per-user scripts and utilities to ~/.local/bin
 
 ## Dependencies
 
-- `mps.base.identity`
+- `odem.base.identity`
 
 ## Example usage
 
 ```yaml
 - hosts: all
   roles:
-    - mps.terminal.scripts
+    - odem.terminal.scripts
 ```
 
 ## Role metadata

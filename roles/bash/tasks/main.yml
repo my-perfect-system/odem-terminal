@@ -35,7 +35,7 @@
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -48,7 +48,7 @@
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
     directory_mode: "0700"
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -56,7 +56,7 @@
 - name: Check for legacy .bash_logout per user
   ansible.builtin.stat:
     path: "{{ entity.home }}/.bash_logout"
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -80,7 +80,7 @@
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_history"
     state: absent
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -89,7 +89,7 @@
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_logout"
     state: absent
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -98,7 +98,7 @@
   ansible.builtin.file:
     path: "{{ entity.home }}/.bashrc_aliases"
     state: absent
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -107,7 +107,7 @@
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_aliases"
     state: absent
-  loop: "{{ identity_users_resolved | mps_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"

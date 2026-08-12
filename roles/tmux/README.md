@@ -1,23 +1,23 @@
 ---
-namespace: mps
+namespace: odem
 collection: terminal
 role: tmux
 ---
 
-# `mps.terminal.tmux`
+# `odem.terminal.tmux`
 
 Install and configure tmux and tmuxinator
 
 ## Dependencies
 
-- `mps.base.identity`
+- `odem.base.identity`
 
 ## Example usage
 
 ```yaml
 - hosts: all
   roles:
-    - mps.terminal.tmux
+    - odem.terminal.tmux
 ```
 
 ## Role metadata

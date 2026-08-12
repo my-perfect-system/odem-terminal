@@ -1,23 +1,23 @@
 ---
-namespace: mps
+namespace: odem
 collection: terminal
 role: python
 ---
 
-# `mps.terminal.python`
+# `odem.terminal.python`
 
 Install and configure Python tooling
 
 ## Dependencies
 
-- `mps.base.identity`
+- `odem.base.identity`
 
 ## Example usage
 
 ```yaml
 - hosts: all
   roles:
-    - mps.terminal.python
+    - odem.terminal.python
 ```
 
 ## Role metadata

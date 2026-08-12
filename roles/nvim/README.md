@@ -1,10 +1,10 @@
 ---
-namespace: mps
+namespace: odem
 collection: terminal
 role: nvim
 ---
 
-# `mps.terminal.nvim`
+# `odem.terminal.nvim`
 
 Install and configure Neovim with dependencies
 
@@ -22,14 +22,14 @@ Install and configure Neovim with dependencies
 
 ## Dependencies
 
-- `mps.base.identity`
+- `odem.base.identity`
 
 ## Example usage
 
 ```yaml
 - hosts: all
   roles:
-    - mps.terminal.nvim
+    - odem.terminal.nvim
 ```
 
 ## Role metadata

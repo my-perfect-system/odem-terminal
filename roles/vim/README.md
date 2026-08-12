@@ -1,10 +1,10 @@
 ---
-namespace: mps
+namespace: odem
 collection: terminal
 role: vim
 ---
 
-# `mps.terminal.vim`
+# `odem.terminal.vim`
 
 Configure vim dotfiles per user
 
@@ -18,14 +18,14 @@ Configure vim dotfiles per user
 
 ## Dependencies
 
-- `mps.base.identity`
+- `odem.base.identity`
 
 ## Example usage
 
 ```yaml
 - hosts: all
   roles:
-    - mps.terminal.vim
+    - odem.terminal.vim
 ```
 
 ## Role metadata

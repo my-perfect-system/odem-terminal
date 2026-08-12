@@ -1,10 +1,10 @@
 ---
-namespace: mps
+namespace: odem
 collection: terminal
 role: rust
 ---
 
-# `mps.terminal.rust`
+# `odem.terminal.rust`
 
 Install and configure Rust toolchain (rustup, cargo, CLI tools)
 
@@ -16,14 +16,14 @@ Install and configure Rust toolchain (rustup, cargo, CLI tools)
 
 ## Dependencies
 
-- `mps.base.identity`
+- `odem.base.identity`
 
 ## Example usage
 
 ```yaml
 - hosts: all
   roles:
-    - mps.terminal.rust
+    - odem.terminal.rust
 ```
 
 ## Role metadata

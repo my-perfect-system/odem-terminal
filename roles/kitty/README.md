@@ -1,10 +1,10 @@
 ---
-namespace: mps
+namespace: odem
 collection: terminal
 role: kitty
 ---
 
-# `mps.terminal.kitty`
+# `odem.terminal.kitty`
 
 Configure kitty terminal emulator per user
 
@@ -16,14 +16,14 @@ Configure kitty terminal emulator per user
 
 ## Dependencies
 
-- `mps.base.identity`
+- `odem.base.identity`
 
 ## Example usage
 
 ```yaml
 - hosts: all
   roles:
-    - mps.terminal.kitty
+    - odem.terminal.kitty
 ```
 
 ## Role metadata

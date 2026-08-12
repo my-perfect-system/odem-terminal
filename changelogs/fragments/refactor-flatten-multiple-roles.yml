@@ -3,7 +3,7 @@
 # Compiles into changelogs/changelog.yaml at release time.
 minor_changes:
   - |
-    `mps-terminal/{bash,python,rust,nvim}` flattened: install.yml + configure.yml (and nvim's tools.yml) inlined into a single `tasks/main.yml` per role. Per-user loops switched from inline `when: user_roles.X` to `mps_filter_users('terminal_X')`.
+    `odem-terminal/{bash,python,rust,nvim}` flattened: install.yml + configure.yml (and nvim's tools.yml) inlined into a single `tasks/main.yml` per role. Per-user loops switched from inline `when: user_roles.X` to `odem_filter_users('terminal_X')`.
   - |
-    `mps-terminal/scripts` had an `install.yml` stub (5 lines, `when: false`) deleted; main.yml now invokes just the real `configure.yml`.
+    `odem-terminal/scripts` had an `install.yml` stub (5 lines, `when: false`) deleted; main.yml now invokes just the real `configure.yml`.
 

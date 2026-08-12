@@ -1,10 +1,10 @@
 ---
-namespace: mps
+namespace: odem
 collection: terminal
 role: fonts
 ---
 
-# `mps.terminal.fonts`
+# `odem.terminal.fonts`
 
 Install and register Nerd Fonts and other TTF fonts
 
@@ -17,14 +17,14 @@ Install and register Nerd Fonts and other TTF fonts
 
 ## Dependencies
 
-- `mps.base.identity`
+- `odem.base.identity`
 
 ## Example usage
 
 ```yaml
 - hosts: all
   roles:
-    - mps.terminal.fonts
+    - odem.terminal.fonts
 ```
 
 ## Role metadata

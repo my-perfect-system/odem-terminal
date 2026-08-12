@@ -15,6 +15,6 @@ galaxy_info:
     - terminal
     - rust
     - cargo
-    - mps-terminal
+    - odem-terminal
 dependencies:
-  - role: mps.base.identity
+  - role: odem.base.identity

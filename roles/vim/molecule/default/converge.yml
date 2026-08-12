@@ -12,4 +12,4 @@
     users_list:
       - name: molecule_user
   roles:
-    - role: mps.terminal.vim
+    - role: odem.terminal.vim

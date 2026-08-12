@@ -6,6 +6,13 @@
     state: present
   when: bash_enable_bash_completion | bool
 
+  # System-level install
+- name: Install zoxide when enabled
+  ansible.builtin.package:
+    name: zoxide
+    state: present
+  when: bash_enable_bash_completion | bool
+
 - name: Install bash fun packages when enabled
   ansible.builtin.package:
     name: "{{ bash_fun_packages }}"

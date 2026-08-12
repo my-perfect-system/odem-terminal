@@ -86,7 +86,9 @@ export QT_ENABLE_HIGHDPI_SCALING=1
 # export DISPLAY=:0
 
 #--- Zoxide --------------------------------------------------------------------
-eval "$(zoxide init bash)"
+if [[ "$(which zoxide)" != "" ]]; then
+  eval "$(zoxide init bash)"
+fi
 #--- Cargo ---------------------------------------------------------------------
 if [[ -f "$HOME/.cargo/env" ]]; then
   . "$HOME/.cargo/env"

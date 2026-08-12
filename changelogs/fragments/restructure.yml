@@ -1,0 +1,6 @@
+---
+release_summary: "Restructured into standalone collection. Adds dependency on mps.base for shared conventions. Standardized galaxy.yml with full repository metadata."
+minor_changes:
+  - "Dependency on mps.base added for shared conventions."
+  - "Repository URL points to standalone mps-terminal repo."
+  - "galaxy.yml now includes tags, repository/documentation/homepage/issues URLs."

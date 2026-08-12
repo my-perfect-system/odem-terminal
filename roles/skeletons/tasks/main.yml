@@ -1,0 +1,3 @@
+---
+- name: "TERM_SKELETONS_MAIN - Run install tasks"
+  ansible.builtin.include_tasks: install.yml

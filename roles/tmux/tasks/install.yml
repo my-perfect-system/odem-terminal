@@ -1,0 +1,7 @@
+---
+- name: "TERM_TMUX_INSTALL - Install tmux and tmuxinator"
+  ansible.builtin.package:
+    name:
+      - tmux
+      - tmuxinator
+    state: present

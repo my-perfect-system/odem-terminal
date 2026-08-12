@@ -1,0 +1,95 @@
+---
+- name: FONTS - Assert supported OS
+  ansible.builtin.assert:
+    that:
+      - ansible_facts["distribution"] == "Debian"
+      - ansible_facts["distribution_major_version"] | int == 13
+    fail_msg: "This role supports Debian 13 (trixie) only"
+    quiet: true
+
+- name: FONTS - Install font dependencies
+  ansible.builtin.package:
+    name:
+      - fontconfig
+      - unzip
+    state: present
+
+- name: FONTS - Ensure font directory exists
+  ansible.builtin.file:
+    path: "{{ fonts_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: FONTS - Check if fonts are already installed
+  ansible.builtin.stat:
+    path: "{{ item.creates if item.creates is defined else item.dst_unzip_path + '/' + item.name + '.ttf' }}"
+  loop: "{{ fonts_list }}"
+  register: fonts_stat_results
+
+- name: FONTS - Download fonts
+  ansible.builtin.get_url:
+    url: "{{ item.0.url }}"
+    dest: "{{ fonts_dir }}/{{ item.0.name }}{{ '.ttf' if item.0.file_only | default(false) else '.zip' }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop: "{{ fonts_list | zip(fonts_stat_results.results) | list }}"
+  loop_control:
+    label: "{{ item.0.name }}"
+  when: not item.1.stat.exists
+
+- name: FONTS - Ensure destination directory for each new font
+  ansible.builtin.file:
+    path: "{{ item.0.dst_unzip_path }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop: "{{ fonts_list | zip(fonts_stat_results.results) | list }}"
+  loop_control:
+    label: "{{ item.0.name }}"
+  when: not item.1.stat.exists
+
+- name: FONTS - Unzip font archives
+  ansible.builtin.unarchive:
+    src: "{{ fonts_dir }}/{{ item.0.name }}.zip"
+    dest: "{{ item.0.dst_unzip_path }}"
+    creates: "{{ item.0.creates | default(omit) }}"
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: true
+  loop: "{{ fonts_list | zip(fonts_stat_results.results) | list }}"
+  loop_control:
+    label: "{{ item.0.name }}"
+  when:
+    - not item.0.file_only | default(false)
+    - not item.1.stat.exists
+  notify: FONTS - Rebuild font cache
+
+- name: FONTS - Copy single-file fonts
+  ansible.builtin.copy:
+    src: "{{ fonts_dir }}/{{ item.0.name }}.ttf"
+    dest: "{{ item.0.dst_unzip_path }}/{{ item.0.name }}.ttf"
+    owner: root
+    group: root
+    mode: "0644"
+    remote_src: true
+  loop: "{{ fonts_list | zip(fonts_stat_results.results) | list }}"
+  loop_control:
+    label: "{{ item.0.name }}"
+  when:
+    - item.0.file_only | default(false)
+    - not item.1.stat.exists
+  notify: FONTS - Rebuild font cache
+
+- name: FONTS - Cleanup downloaded font files
+  ansible.builtin.file:
+    path: "{{ fonts_dir }}/{{ item.0.name }}{{ '.ttf' if item.0.file_only | default(false) else '.zip' }}"
+    state: absent
+  loop: "{{ fonts_list | zip(fonts_stat_results.results) | list }}"
+  loop_control:
+    label: "{{ item.0.name }}"
+  when:
+    - item.0.cleanup | default(true)
+    - not item.1.stat.exists

@@ -1,0 +1,26 @@
+#!/bin/bash
+
+# shellcheck disable=SC2139,SC2015,SC2142,SC2154
+
+# Files
+LOG_TIMINGS="$HOME/.config/nvim-session/startup_log.log"
+LAST_SESSION="$HOME/.config/nvim-session/last_session.vim"
+LAST_SESSION_ROOT="/root/.config/nvim-session/last_session.vim"
+
+# vim
+alias edit='nvim'
+alias v='vim'
+alias vi='vim'
+alias sv='sudo vim'
+alias svim='sudo vim'
+
+# Set default config
+export NVIM_APPNAME="nvim"
+
+# Aliases
+alias n='nvim'
+alias ntime="rm -rf $LOG_TIMINGS ; nvim --startuptime $LOG_TIMINGS -c 'q'; cat $LOG_TIMINGS | tail -n 2"
+alias nls='nvim -S $LAST_SESSION'
+alias nvd='NVIM_APPNAME=nvim-dev nvim' 
+alias nvdls='NVIM_APPNAME=nvim-dev nvim -S $LAST_SESSION' 
+alias nvdtime='NVIM_APPNAME=nvim-dev nvim --startuptime $LOG_TIMINGS -c "q"' 

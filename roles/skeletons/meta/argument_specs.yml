@@ -1,0 +1,15 @@
+---
+argument_specs:
+  main:
+    short_description: "Deploy per-user project skeleton templates to ~/.config/skeletons"
+    options:
+      users_catalog:
+        type: dict
+        required: false
+        default: {}
+        description: "User identity catalog keyed by unique id."
+      users_list:
+        type: list
+        required: false
+        default: []
+        description: "List of dicts with 'name' (catalog key) and 'state' (present/absent)."

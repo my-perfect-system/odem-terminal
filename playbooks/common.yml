@@ -1,0 +1,10 @@
+---
+- name: Terminal common install
+  hosts: all
+  become: true
+  roles:
+    - role: mps.terminal.bash
+    - role: mps.terminal.fonts
+    - role: mps.terminal.vim
+    - role: mps.terminal.python
+    - role: mps.terminal.rust

@@ -1,0 +1,14 @@
+---
+
+users_catalog: {}  # noqa var-naming[no-role-prefix]
+users_list: []  # noqa var-naming[no-role-prefix]
+fonts_dir: /usr/share/fonts
+fonts_list:
+  - name: JetBrainsMono
+    url: https://github.com/ryanoasis/nerd-fonts/releases/download/v3.1.1/JetBrainsMono.zip
+    dst_unzip_path: "{{ fonts_dir }}/JetBrainsMono"
+    creates: "{{ fonts_dir }}/JetBrainsMono/JetBrainsMonoNerdFont-Regular.ttf"
+  - name: codicon
+    url: https://github.com/microsoft/vscode-codicons/releases/download/0.0.36/codicon.ttf
+    dst_unzip_path: "{{ fonts_dir }}/codicon"
+    file_only: true

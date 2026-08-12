@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# shellcheck disable=SC2139,SC2015,SC2142,SC2154
+
+# source bash
+alias sb='source ~/.bashrc'
+alias bash-reload='source ~/.bashrc'
+
+alias whichalias='alias | grep '
+# Random
+alias h='history'
+alias grep='grep --color=auto'
+
+# kitty icat
+alias icat='kitty +kitten icat --align=center --scale-up'
+
+# command history
+alias r="fc -r"
+alias rx='bash -c "$(fc -ln -1)"'
+alias rs='sudo $(fc -ln -1)'
+alias ry="fc -ln -1 | sed 's/^[[:space:]]*//' | tr -d \"\n\" | xclip -selection clipboard"
+alias rl1="fc -ln -1"
+alias rl2="fc -ln -2"
+alias rl3="fc -ln -3"
+alias rl4="fc -ln -4"
+alias rl5="fc -ln -5"
+alias rl6="fc -ln -6"
+alias rl7="fc -ln -7"
+alias rl8="fc -ln -8"
+alias rl9="fc -ln -9"

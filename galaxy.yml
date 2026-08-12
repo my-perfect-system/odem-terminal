@@ -1,0 +1,31 @@
+---
+namespace: mps
+name: terminal
+version: 0.3.0
+readme: README.md
+authors:
+  - foo <bar@baz.com>
+description: Terminal environment and developer tools
+license:
+  - GPL-3.0-or-later
+tags:
+  - linux
+  - terminal
+  - shell
+  - fonts
+  - python
+  - rust
+  - mps
+repository: https://github.com/my-perfect-system/mps-terminal
+documentation: https://github.com/my-perfect-system/mps-terminal
+homepage: https://github.com/my-perfect-system/mps-terminal
+issues: https://github.com/my-perfect-system/mps-terminal/issues
+build_ignore:
+  - .git
+  - .github
+  - .gitignore
+  - "*.tar.gz"
+  - .ansible
+dependencies:
+  mps.base: ">=0.1.0"
+  ansible.posix: ">=1.0.0"

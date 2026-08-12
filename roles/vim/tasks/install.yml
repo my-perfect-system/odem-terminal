@@ -1,0 +1,34 @@
+---
+- name: "TERM_VIM_INSTALL - Install vim-nox and plugins"
+  ansible.builtin.package:
+    name:
+      - vim-nox
+      - vim-addon-manager
+      - vim-airline
+      - vim-gruvbox
+      - vim-ale
+      - vim-autopep8
+      - vim-ctrlp
+      - vim-fugitive
+      - vim-gitgutter
+      - vim-snippets
+      - vim-syntastic
+      - vim-youcompleteme
+    state: present
+  when: vim_install_vim_nox | bool
+
+- name: "TERM_VIM_INSTALL - Install lua packages"
+  ansible.builtin.package:
+    name:
+      - liblua5.3-dev
+      - liblua5.1-dev
+      - lua5.1
+      - lua5.3
+    state: present
+  when: vim_install_lua | bool
+
+- name: "TERM_VIM_INSTALL - Install xclip"
+  ansible.builtin.package:
+    name: xclip
+    state: present
+  when: vim_install_xclip | bool

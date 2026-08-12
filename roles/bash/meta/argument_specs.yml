@@ -1,0 +1,30 @@
+---
+argument_specs:
+  main:
+    short_description: Configure bash dotfiles per user
+    options:
+      bash_install_bash_completion:
+        type: bool
+        required: false
+        default: true
+        description: "Install bash-completion package"
+      bash_fun_packages:
+        type: list
+        required: false
+        elements: str
+        description: Apt packages providing shell fun utilities (cowsay, figlet, fortune, cmatrix, etc.)
+      bash_install_aliases:
+        type: bool
+        required: false
+        default: true
+        description: "Deploy system-wide alias files to /etc/bash_aliases.d/"
+      users_catalog:
+        type: dict
+        required: false
+        default: {}
+        description: "Identity catalog keyed by unique id — see mps.users.users docs"
+      users_list:
+        type: list
+        required: false
+        default: []
+        description: "List of dicts with 'name' (catalog key) and optional 'state'"

@@ -1,0 +1,13 @@
+#!/bin/bash
+# shellcheck disable=SC2139,SC2015,SC2142,SC2154
+
+# systemctl
+alias sdr='sudo systemctl daemon-reload'
+alias syss='sudo systemctl status'
+alias sysup='sudo systemctl start'
+alias sysdown='sudo systemctl stop'
+alias sysre='sudo systemctl restart'
+
+# journalctl
+alias sysj='sudo journalctl -f -l --no-pager -u'
+

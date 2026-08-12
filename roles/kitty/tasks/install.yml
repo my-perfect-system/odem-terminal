@@ -1,0 +1,12 @@
+---
+- name: "TERM_KITTY_INSTALL - Install kitty"
+  ansible.builtin.package:
+    name: kitty
+    state: present
+
+- name: "TERM_KITTY_INSTALL - Set kitty as default terminal emulator"
+  ansible.builtin.command:
+    cmd: update-alternatives --set x-terminal-emulator /usr/bin/kitty
+  changed_when: false
+  failed_when: false
+  when: kitty_install_alternatives | bool

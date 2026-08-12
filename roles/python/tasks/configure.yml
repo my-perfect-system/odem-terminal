@@ -1,0 +1,57 @@
+---
+- name: "TERM_PYTHON_CONFIGURE - Create .venvs directory"
+  ansible.builtin.file:
+    path: "{{ entity.home }}/.venvs"
+    state: directory
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0700"
+  loop: "{{ python_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: "TERM_PYTHON_CONFIGURE - Create default Python venv"
+  ansible.builtin.command:
+    cmd: sudo -u {{ entity.name }} python3 -m venv "{{ entity.home }}/.venvs/default"
+    creates: "{{ entity.home }}/.venvs/default"
+  loop: "{{ python_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: "TERM_PYTHON_CONFIGURE - Install pip packages into default venv"
+  ansible.builtin.command:
+    cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.venvs/default/bin/pip" install pip setuptools wheel black ruff pylint
+    creates: "{{ entity.home }}/.venvs/default/bin/black"
+  loop: "{{ python_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: "TERM_PYTHON_CONFIGURE - Activate default venv in .bashrc"
+  ansible.builtin.lineinfile:
+    path: "{{ entity.home }}/.bashrc"
+    line: "source ~/.venvs/default/bin/activate"
+    regexp: "source ~/.venvs/default/bin/activate"
+    state: present
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0600"
+  loop: "{{ python_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: "TERM_PYTHON_CONFIGURE - Fix ownership of .venvs"
+  ansible.builtin.file:
+    path: "{{ entity.home }}/.venvs"
+    state: directory
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0700"
+    recurse: true
+  loop: "{{ python_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"

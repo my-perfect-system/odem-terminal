@@ -1,0 +1,5 @@
+---
+- name: "TERM_SCRIPTS_INSTALL - No system packages for scripts"
+  ansible.builtin.debug:
+    msg: "scripts role has no system install step"
+  when: false

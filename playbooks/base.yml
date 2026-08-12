@@ -1,0 +1,7 @@
+---
+- name: Terminal base install
+  hosts: all
+  become: true
+  roles:
+    - role: mps.terminal.bash
+    - role: mps.terminal.vim

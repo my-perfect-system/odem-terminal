@@ -1,0 +1,9 @@
+---
+- name: "TERM_BASH_MAIN - Resolve users"
+  ansible.builtin.include_tasks: resolve.yml
+
+- name: "TERM_BASH_MAIN - Install system packages"
+  ansible.builtin.include_tasks: install.yml
+
+- name: "TERM_BASH_MAIN - Configure per-user bash"
+  ansible.builtin.include_tasks: configure.yml

@@ -1,0 +1,54 @@
+---
+# /home/jb/.config/tmuxinator/config.yml
+
+name: config
+root: ~/.config/
+windows:
+  - scratch:
+      layout: "0503,238x54,0,0[238x44,0,0{146x44,0,0,38,91x44,147,0,40},238x9,0,45,39]"
+      panes:
+        - "cd $HOME/scratch ; scratch"
+        - "cd $HOME/scratch"
+        - "cd $HOME/scratch"
+  - bashrc:
+      layout: "0503,238x54,0,0[238x44,0,0{146x44,0,0,38,91x44,147,0,40},238x9,0,45,39]"
+      panes:
+        - "cd $HOME/.config/bashrc ; cfg-bashrc"
+        - "cd $HOME/.config/bashrc"
+        - "cd $HOME/.config/bashrc"
+  - nvim:
+      layout: "0503,238x54,0,0[238x44,0,0{146x44,0,0,38,91x44,147,0,40},238x9,0,45,39]"
+      panes:
+        - "cd $HOME/.config/nvim ; cfg-nvim"
+        - "cd $HOME/.config/nvim"
+        - "cd $HOME/.config/nvim"
+  - qtile:
+      layout: "0503,238x54,0,0[238x44,0,0{146x44,0,0,38,91x44,147,0,40},238x9,0,45,39]"
+      panes:
+        - "cd $HOME/.config/qtile ; cfg-qtile"
+        - "cd $HOME/.config/qtile"
+        - "cd $HOME/.config/qtile"
+  - tmux:
+      layout: "0503,238x54,0,0[238x44,0,0{146x44,0,0,38,91x44,147,0,40},238x9,0,45,39]"
+      panes:
+        - "cd $HOME/.config/tmux ; cfg-tmux"
+        - "cd $HOME/.config/tmux"
+        - "cd $HOME/.config/tmux"
+  - tmuxinator:
+      layout: "0503,238x54,0,0[238x44,0,0{146x44,0,0,38,91x44,147,0,40},238x9,0,45,39]"
+      panes:
+        - "cd $HOME/.config/tmuxinator ; cfg-tmuxinator"
+        - "cd $HOME/.config/tmuxinator"
+        - "cd $HOME/.config/tmuxinator"
+  - mps:
+      layout: "0503,238x54,0,0[238x44,0,0{146x44,0,0,38,91x44,147,0,40},238x9,0,45,39]"
+      panes:
+        - "cd $HOME/repo/github/mpsffap/ansible-fragments/ ; n roles/stage2-terminal/tasks/terminal-base-bash.yml"
+        - "cd $HOME/repo/github/mpsffap/ansible-fragments/"
+        - "cd $HOME/repo/github/mpsffap/ansible-fragments/"
+  - oc:
+      layout: "0503,238x54,0,0[238x44,0,0{146x44,0,0,38,91x44,147,0,40},238x9,0,45,39]"
+      panes:
+        - "cd $HOME/.config/opencode ; cfg-opencode"
+        - "cd $HOME/.config/opencode"
+        - "cd $HOME/.config/opencode"

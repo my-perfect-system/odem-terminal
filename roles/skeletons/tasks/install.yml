@@ -1,0 +1,13 @@
+---
+- name: "TERM_SKELETONS_INSTALL - Create /etc/mps/skeletons"
+  ansible.builtin.file:
+    path: /etc/mps/skeletons
+    state: directory
+    mode: "0755"
+
+- name: "TERM_SKELETONS_INSTALL - Copy skeleton templates"
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/skeletons/"
+    dest: /etc/mps/skeletons/
+    mode: "0644"
+    directory_mode: "0755"

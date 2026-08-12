@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# shellcheck disable=SC2139,SC2015,SC2142,SC2154
+
+# cat
+alias scat='sudo cat'
+alias CAT='batcat --style=numbers --color=always'
+alias SCAT='sudo batcat --style=numbers --color=always'
+alias bcat='batcat --style=numbers --color=always'
+alias sbcat='sudo batcat --style=numbers --color=always'
+

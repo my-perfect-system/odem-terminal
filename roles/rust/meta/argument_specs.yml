@@ -1,0 +1,20 @@
+---
+argument_specs:
+  main:
+    short_description: "Install and configure Rust toolchain (rustup, cargo, CLI tools)"
+    options:
+      users_catalog:
+        type: dict
+        required: false
+        default: {}
+        description: "User identity catalog keyed by unique id."
+      users_list:
+        type: list
+        required: false
+        default: []
+        description: "List of dicts with 'name' (catalog key) and 'state' (present/absent)."
+      rust_toolchain_reinstall:
+        type: bool
+        required: false
+        default: false
+        description: Nuke ~/.rustup/toolchains and reinstall Rust toolchain from scratch

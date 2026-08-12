@@ -1,0 +1,7 @@
+---
+
+users_catalog: {}  # noqa var-naming[no-role-prefix]
+users_list: []  # noqa var-naming[no-role-prefix]
+vim_install_vim_nox: true
+vim_install_lua: true
+vim_install_xclip: true

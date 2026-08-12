@@ -1,0 +1,30 @@
+---
+argument_specs:
+  main:
+    short_description: Configure vim dotfiles per user
+    options:
+      vim_install_vim_nox:
+        type: bool
+        required: false
+        default: true
+        description: "Install vim-nox and vim plugin packages"
+      vim_install_lua:
+        type: bool
+        required: false
+        default: true
+        description: "Install lua development packages"
+      vim_install_xclip:
+        type: bool
+        required: false
+        default: true
+        description: "Install xclip package"
+      users_catalog:
+        type: dict
+        required: false
+        default: {}
+        description: "Identity catalog keyed by unique id — see mps.users.users docs"
+      users_list:
+        type: list
+        required: false
+        default: []
+        description: "List of dicts with 'name' (catalog key) and optional 'state'"

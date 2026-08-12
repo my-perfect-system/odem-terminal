@@ -1,0 +1,89 @@
+---
+- name: "TERM_RUST_CONFIGURE - Create .rustup directory"
+  ansible.builtin.file:
+    path: "{{ entity.home }}/.rustup"
+    state: directory
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0700"
+  loop: "{{ rust_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: "TERM_RUST_CONFIGURE - Create .cargo directory"
+  ansible.builtin.file:
+    path: "{{ entity.home }}/.cargo"
+    state: directory
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0700"
+  loop: "{{ rust_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: "TERM_RUST_CONFIGURE - Install rustup for each user"
+  ansible.builtin.command:
+    cmd: sudo -u {{ entity.name }} /usr/share/mps/tools/rustup/rustup.sh -y --no-modify-path
+    creates: "{{ entity.home }}/.cargo/bin/rustc"
+  loop: "{{ rust_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: "TERM_RUST_CONFIGURE - Remove incomplete toolchains"
+  ansible.builtin.file:
+    path: "{{ entity.home }}/.rustup/toolchains"
+    state: absent
+  loop: "{{ rust_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+  when: rust_toolchain_reinstall | bool
+
+- name: "TERM_RUST_CONFIGURE - Set default rust toolchain"
+  ansible.builtin.command:
+    cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/rustup" default stable
+  loop: "{{ rust_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+  changed_when: false
+
+- name: "TERM_RUST_CONFIGURE - Add cargo bin to PATH in .bashrc"
+  ansible.builtin.lineinfile:
+    path: "{{ entity.home }}/.bashrc"
+    line: 'export PATH="$PATH:$HOME/.cargo/bin"'
+    insertbefore: EOF
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0600"
+  loop: "{{ rust_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: "TERM_RUST_CONFIGURE - Source cargo env in .bashrc"
+  ansible.builtin.lineinfile:
+    path: "{{ entity.home }}/.bashrc"
+    line: 'source "$HOME/.cargo/env"'
+    insertbefore: EOF
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0600"
+  loop: "{{ rust_users_present }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: "TERM_RUST_CONFIGURE - Fix ownership of .rustup and .cargo"
+  ansible.builtin.file:
+    path: "{{ item.0.home }}/{{ item.1 }}"
+    state: directory
+    owner: "{{ item.0.name }}"
+    group: "{{ item.0.group | default(item.0.name) }}"
+    recurse: true
+  loop: "{{ rust_users_present | product(['.rustup', '.cargo']) | list }}"
+  loop_control:
+    label: "{{ item.0.name }}/{{ item.1 }}"

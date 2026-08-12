@@ -1,0 +1,20 @@
+---
+argument_specs:
+  main:
+    short_description: Configure kitty terminal emulator per user
+    options:
+      kitty_install_alternatives:
+        type: bool
+        required: false
+        default: true
+        description: "Set kitty as default x-terminal-emulator via update-alternatives"
+      users_catalog:
+        type: dict
+        required: false
+        default: {}
+        description: "Identity catalog keyed by unique id — see mps.users.users docs"
+      users_list:
+        type: list
+        required: false
+        default: []
+        description: "List of dicts with 'name' (catalog key) and optional 'state'"

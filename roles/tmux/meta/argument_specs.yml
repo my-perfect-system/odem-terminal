@@ -1,0 +1,15 @@
+---
+argument_specs:
+  main:
+    short_description: Install and configure tmux and tmuxinator
+    description:
+      - Installs tmux and tmuxinator system-wide, deploys per-user config.
+    options:
+      users_catalog:
+        type: dict
+        required: false
+        description: User identity catalog keyed by unique id
+      users_list:
+        type: list
+        required: false
+        description: Per-host user assignments referencing catalog

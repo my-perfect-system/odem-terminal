@@ -1,0 +1,12 @@
+---
+
+users_catalog: {}  # noqa var-naming[no-role-prefix]
+users_list: []  # noqa var-naming[no-role-prefix]
+bash_install_bash_completion: true
+bash_fun_packages:
+  - cowsay
+  - figlet
+  - fortune-mod
+  - fortunes-min
+  - cmatrix
+bash_install_aliases: true

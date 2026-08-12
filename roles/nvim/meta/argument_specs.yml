@@ -1,9 +1,9 @@
----
 argument_specs:
   main:
     short_description: Install and configure Neovim with dependencies
     description:
-      - Installs Neovim via tarball, apt dependencies, npm tools, and deploys per-user config.
+    - Installs Neovim via tarball, apt dependencies, npm tools, and deploys per-user
+      config.
     options:
       nvim_enable_apt_deps:
         type: bool
@@ -20,7 +20,7 @@ argument_specs:
       nvim_yazi_version:
         type: str
         required: false
-        default: "v26.5.6"
+        default: v26.5.6
         description: Yazi release version tag to download
       nvim_enable_yazi:
         type: bool
@@ -37,11 +37,3 @@ argument_specs:
         required: false
         default: true
         description: Install tree-sitter-cli npm package
-      users_catalog:
-        type: dict
-        required: false
-        description: User identity catalog keyed by unique id
-      users_list:
-        type: list
-        required: false
-        description: Per-host user assignments referencing catalog

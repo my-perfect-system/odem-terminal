@@ -1,24 +1,24 @@
 ---
-- name: "TERM_BASH_INSTALL - Install bash-completion"
+- name: Install bash-completion when enabled
   ansible.builtin.package:
     name: bash-completion
     state: present
   when: bash_enable_bash_completion | bool
 
-- name: "TERM_BASH_INSTALL - Install fun packages"
+- name: Install bash fun packages when enabled
   ansible.builtin.package:
     name: "{{ bash_fun_packages }}"
     state: present
   when: bash_enable_fun_packages | bool and bash_fun_packages | length > 0
 
-- name: "TERM_BASH_INSTALL - Create system aliases directory"
+- name: Ensure /etc/bash_aliases.d exists when aliases enabled
   ansible.builtin.file:
     path: /etc/bash_aliases.d
     state: directory
     mode: "0755"
   when: bash_enable_aliases | bool
 
-- name: "TERM_BASH_INSTALL - Deploy system alias files"
+- name: Deploy system bash aliases when enabled
   ansible.builtin.copy:
     src: "{{ role_path }}/files/etc/bash_aliases.d/"
     dest: /etc/bash_aliases.d/

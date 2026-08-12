@@ -1,6 +1,6 @@
 ---
-- name: "TERM_RUST_MAIN - Run install tasks"
+- name: Install rust prerequisites
   ansible.builtin.include_tasks: install.yml
 
-- name: "TERM_RUST_MAIN - Run configure tasks"
+- name: Configure per-user rust toolchain
   ansible.builtin.include_tasks: configure.yml

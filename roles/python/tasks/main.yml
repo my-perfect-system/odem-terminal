@@ -1,6 +1,6 @@
 ---
-- name: "TERM_PYTHON_MAIN - Install system packages"
+- name: Install python packages
   ansible.builtin.include_tasks: install.yml
 
-- name: "TERM_PYTHON_MAIN - Configure per-user python"
+- name: Configure per-user python venv
   ansible.builtin.include_tasks: configure.yml

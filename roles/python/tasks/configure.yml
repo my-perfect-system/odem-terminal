@@ -1,5 +1,5 @@
 ---
-- name: "TERM_PYTHON_CONFIGURE - Create .venvs directory"
+- name: Ensure per-user .venvs directory exists
   ansible.builtin.file:
     path: "{{ entity.home }}/.venvs"
     state: directory
@@ -14,7 +14,7 @@
     - entity.user_roles.terminal_python | default(false)
     - entity.state == 'present'
 
-- name: "TERM_PYTHON_CONFIGURE - Create default Python venv"
+- name: Create per-user default python venv
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} python3 -m venv "{{ entity.home }}/.venvs/default"
     creates: "{{ entity.home }}/.venvs/default"
@@ -26,7 +26,7 @@
     - entity.user_roles.terminal_python | default(false)
     - entity.state == 'present'
 
-- name: "TERM_PYTHON_CONFIGURE - Install pip packages into default venv"
+- name: Install base python packages into default venv
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.venvs/default/bin/pip" install pip setuptools wheel black ruff pylint
     creates: "{{ entity.home }}/.venvs/default/bin/black"
@@ -38,7 +38,7 @@
     - entity.user_roles.terminal_python | default(false)
     - entity.state == 'present'
 
-- name: "TERM_PYTHON_CONFIGURE - Activate default venv in .bashrc"
+- name: Auto-activate default venv in per-user .bashrc
   ansible.builtin.lineinfile:
     path: "{{ entity.home }}/.bashrc"
     line: "source ~/.venvs/default/bin/activate"
@@ -55,7 +55,7 @@
     - entity.user_roles.terminal_python | default(false)
     - entity.state == 'present'
 
-- name: "TERM_PYTHON_CONFIGURE - Fix ownership of .venvs"
+- name: Ensure per-user .venvs tree has correct permissions
   ansible.builtin.file:
     path: "{{ entity.home }}/.venvs"
     state: directory

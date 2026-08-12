@@ -1,6 +1,6 @@
 ---
-- name: "TERM_SCRIPTS_MAIN - Run install tasks"
+- name: Skip system install for scripts role
   ansible.builtin.include_tasks: install.yml
 
-- name: "TERM_SCRIPTS_MAIN - Run configure tasks"
+- name: Configure per-user scripts directory
   ansible.builtin.include_tasks: configure.yml

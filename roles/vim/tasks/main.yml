@@ -1,6 +1,6 @@
 ---
-- name: "TERM_VIM_MAIN - Install system packages"
+- name: Install vim packages
   ansible.builtin.include_tasks: install.yml
 
-- name: "TERM_VIM_MAIN - Configure per-user vim"
+- name: Configure per-user vim dotfiles
   ansible.builtin.include_tasks: configure.yml

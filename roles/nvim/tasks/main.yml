@@ -1,9 +1,9 @@
 ---
-- name: "TERM_NVIM_MAIN - Install system packages"
+- name: Install nvim packages and binary
   ansible.builtin.include_tasks: install.yml
 
-- name: "TERM_NVIM_MAIN - Configure per-user nvim"
+- name: Configure per-user nvim dotfiles
   ansible.builtin.include_tasks: configure.yml
 
-- name: "TERM_NVIM_MAIN - Install nvim tools"
+- name: Install nvim companion tools
   ansible.builtin.include_tasks: tools.yml

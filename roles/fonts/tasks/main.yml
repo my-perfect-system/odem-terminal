@@ -1,5 +1,5 @@
 ---
-- name: FONTS - Assert supported OS
+- name: Assert Debian 13 target
   ansible.builtin.assert:
     that:
       - ansible_facts["distribution"] == "Debian"
@@ -7,26 +7,26 @@
     fail_msg: "This role supports Debian 13 (trixie) only"
     quiet: true
 
-- name: FONTS - Install font dependencies
+- name: Install fontconfig and unzip
   ansible.builtin.package:
     name:
       - fontconfig
       - unzip
     state: present
 
-- name: FONTS - Ensure font directory exists
+- name: Ensure fonts directory exists
   ansible.builtin.file:
     path: "{{ fonts_dir }}"
     state: directory
     mode: "0755"
 
-- name: FONTS - Check if fonts are already installed
+- name: Stat existing font files
   ansible.builtin.stat:
     path: "{{ item.creates if item.creates is defined else item.dst_unzip_path + '/' + item.name + '.ttf' }}"
   loop: "{{ fonts_list }}"
   register: fonts_stat_results
 
-- name: FONTS - Download fonts
+- name: Download font archives
   ansible.builtin.get_url:
     url: "{{ item.0.url }}"
     dest: "{{ fonts_dir }}/{{ item.0.name }}{{ '.ttf' if item.0.file_only | default(false) else '.zip' }}"
@@ -38,7 +38,7 @@
     label: "{{ item.0.name }}"
   when: not item.1.stat.exists
 
-- name: FONTS - Ensure destination directory for each new font
+- name: Ensure font extract directories exist
   ansible.builtin.file:
     path: "{{ item.0.dst_unzip_path }}"
     state: directory
@@ -50,7 +50,7 @@
     label: "{{ item.0.name }}"
   when: not item.1.stat.exists
 
-- name: FONTS - Unzip font archives
+- name: Unarchive font zip files
   ansible.builtin.unarchive:
     src: "{{ fonts_dir }}/{{ item.0.name }}.zip"
     dest: "{{ item.0.dst_unzip_path }}"
@@ -65,9 +65,9 @@
   when:
     - not item.0.file_only | default(false)
     - not item.1.stat.exists
-  notify: FONTS - Rebuild font cache
+  notify: Rebuild font cache
 
-- name: FONTS - Copy single-file fonts
+- name: Copy single-font files into place
   ansible.builtin.copy:
     src: "{{ fonts_dir }}/{{ item.0.name }}.ttf"
     dest: "{{ item.0.dst_unzip_path }}/{{ item.0.name }}.ttf"
@@ -81,9 +81,9 @@
   when:
     - item.0.file_only | default(false)
     - not item.1.stat.exists
-  notify: FONTS - Rebuild font cache
+  notify: Rebuild font cache
 
-- name: FONTS - Cleanup downloaded font files
+- name: Clean up downloaded font archives
   ansible.builtin.file:
     path: "{{ fonts_dir }}/{{ item.0.name }}{{ '.ttf' if item.0.file_only | default(false) else '.zip' }}"
     state: absent

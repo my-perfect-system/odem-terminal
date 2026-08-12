@@ -1,26 +1,26 @@
 ---
-- name: "TERM_NVIM_TOOLS - Download yazi pre-built binary"
+- name: Download yazi tarball
   ansible.builtin.get_url:
     url: "https://github.com/sxyazi/yazi/releases/download/{{ nvim_yazi_version }}/yazi-x86_64-unknown-linux-gnu.zip"
     dest: "/tmp/yazi-x86_64-unknown-linux-gnu.zip"
     mode: "0644"
   when: nvim_enable_yazi | bool
 
-- name: "TERM_NVIM_TOOLS - Create yazi extract directory"
+- name: Ensure yazi extract directory exists
   ansible.builtin.file:
     path: /tmp/yazi-extract
     state: directory
     mode: "0755"
   when: nvim_enable_yazi | bool
 
-- name: "TERM_NVIM_TOOLS - Extract yazi archive"
+- name: Extract yazi archive
   ansible.builtin.unarchive:
     src: /tmp/yazi-x86_64-unknown-linux-gnu.zip
     dest: /tmp/yazi-extract
     remote_src: true
   when: nvim_enable_yazi | bool
 
-- name: "TERM_NVIM_TOOLS - Install yazi binaries"
+- name: Install yazi and ya per user
   ansible.builtin.copy:
     src: "/tmp/yazi-extract/yazi-x86_64-unknown-linux-gnu/{{ item.1 }}"
     dest: "{{ item.0.home }}/.cargo/bin/{{ item.1 }}"
@@ -33,7 +33,7 @@
     label: "{{ item.0.name }}/{{ item.1 }}"
   when: nvim_enable_yazi | bool
 
-- name: "TERM_NVIM_TOOLS - Cleanup yazi temp files"
+- name: Clean up yazi download artifacts
   ansible.builtin.file:
     path: "{{ item }}"
     state: absent
@@ -42,7 +42,7 @@
     - /tmp/yazi-extract
   when: nvim_enable_yazi | bool
 
-- name: "TERM_NVIM_TOOLS - Install fd-find"
+- name: Install fd-find via cargo per user
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/cargo" install --locked fd-find
     creates: "{{ entity.home }}/.cargo/bin/fd"
@@ -52,7 +52,7 @@
     label: "{{ entity.name }}"
   when: nvim_enable_fd | bool
 
-- name: "TERM_NVIM_TOOLS - Install tree-sitter-cli"
+- name: Install tree-sitter-cli via cargo per user
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/cargo" install --locked tree-sitter-cli
     creates: "{{ entity.home }}/.cargo/bin/tree-sitter"

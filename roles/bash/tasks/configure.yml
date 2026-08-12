@@ -1,5 +1,5 @@
 ---
-- name: "TERM_BASH_CONFIGURE - Deploy .bashrc"
+- name: Deploy per-user .bashrc
   ansible.builtin.copy:
     src: "{{ role_path }}/files/dotfiles/.bashrc"
     dest: "{{ entity.home }}/.bashrc"
@@ -14,7 +14,7 @@
     - entity.user_roles.terminal_bash | default(false)
     - entity.state == 'present'
 
-- name: "TERM_BASH_CONFIGURE - Deploy .config/bashrc/ directory"
+- name: Deploy per-user .config/bashrc directory
   ansible.builtin.copy:
     src: "{{ role_path }}/files/dotfiles/.config/bashrc/"
     dest: "{{ entity.home }}/.config/bashrc/"
@@ -30,7 +30,7 @@
     - entity.user_roles.terminal_bash | default(false)
     - entity.state == 'present'
 
-- name: "TERM_BASH_CONFIGURE - Check for .bash_logout"
+- name: Check for legacy .bash_logout per user
   ansible.builtin.stat:
     path: "{{ entity.home }}/.bash_logout"
   loop: "{{ identity_users_resolved }}"
@@ -42,7 +42,7 @@
     - entity.state == 'present'
   register: bash_logout_stat
 
-- name: "TERM_BASH_CONFIGURE - Copy .bash_logout to .config/bashrc/ if not already present"
+- name: Migrate legacy .bash_logout into bashrc dir
   ansible.builtin.copy:
     src: "{{ item.entity.home }}/.bash_logout"
     dest: "{{ item.entity.home }}/.config/bashrc/.bash_logout"
@@ -56,7 +56,7 @@
     label: "{{ item.entity.name }}"
   when: item.stat.exists
 
-- name: "TERM_BASH_CONFIGURE - Delete stale .bash_history"
+- name: Remove legacy .bash_history per user
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_history"
     state: absent
@@ -68,7 +68,7 @@
     - entity.user_roles.terminal_bash | default(false)
     - entity.state == 'present'
 
-- name: "TERM_BASH_CONFIGURE - Delete stale .bash_logout"
+- name: Remove legacy .bash_logout per user
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_logout"
     state: absent
@@ -80,7 +80,7 @@
     - entity.user_roles.terminal_bash | default(false)
     - entity.state == 'present'
 
-- name: "TERM_BASH_CONFIGURE - Delete stale .bashrc_aliases"
+- name: Remove legacy .bashrc_aliases per user
   ansible.builtin.file:
     path: "{{ entity.home }}/.bashrc_aliases"
     state: absent
@@ -92,7 +92,7 @@
     - entity.user_roles.terminal_bash | default(false)
     - entity.state == 'present'
 
-- name: "TERM_BASH_CONFIGURE - Delete stale .bash_aliases"
+- name: Remove legacy .bash_aliases per user
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_aliases"
     state: absent

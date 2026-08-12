@@ -1,16 +1,16 @@
 ---
-- name: "TERM_RUST_INSTALL - Install clang"
+- name: Install clang for cargo
   ansible.builtin.package:
     name: clang
     state: present
 
-- name: "TERM_RUST_INSTALL - Create tools directory"
+- name: Ensure rustup tools directory exists
   ansible.builtin.file:
     path: /usr/share/mps/tools/rustup
     state: directory
     mode: "0755"
 
-- name: "TERM_RUST_INSTALL - Download rustup.sh"
+- name: Download rustup installer
   ansible.builtin.get_url:
     url: https://sh.rustup.rs
     dest: /usr/share/mps/tools/rustup/rustup.sh

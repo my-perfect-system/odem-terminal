@@ -1,5 +1,5 @@
 ---
-- name: "TERM_NVIM_INSTALL - Install apt dependencies"
+- name: Install nvim apt dependencies
   ansible.builtin.package:
     name:
       - lazygit
@@ -37,41 +37,41 @@
     state: present
   when: nvim_enable_apt_deps | bool
 
-- name: "TERM_NVIM_INSTALL - Install npm tools"
+- name: Install nvim npm tools globally
   ansible.builtin.command:
     cmd: npm install -g neovim vint luacheck
     creates: /usr/lib/node_modules/neovim
   when: nvim_enable_npm_tools | bool
 
-- name: "TERM_NVIM_INSTALL - Create nvim tools directory"
+- name: Ensure nvim tarball target directory exists
   ansible.builtin.file:
     path: /usr/share/mps/tools/nvim/
     state: directory
     mode: "0755"
   when: nvim_enable_tarball | bool
 
-- name: "TERM_NVIM_INSTALL - Download Neovim tarball"
+- name: Download nvim upstream tarball
   ansible.builtin.get_url:
     url: https://github.com/neovim/neovim/releases/download/v0.12.1/nvim-linux-x86_64.tar.gz
     dest: /usr/share/mps/tools/nvim/
     mode: "0644"
   when: nvim_enable_tarball | bool
 
-- name: "TERM_NVIM_INSTALL - Extract Neovim tarball"
+- name: Extract nvim tarball
   ansible.builtin.unarchive:
     src: /usr/share/mps/tools/nvim/nvim-linux-x86_64.tar.gz
     dest: /usr/share/mps/tools/nvim/
     remote_src: true
   when: nvim_enable_tarball | bool
 
-- name: "TERM_NVIM_INSTALL - Remove /usr/bin/nvim if present"
+- name: Remove pre-existing /usr/bin/nvim if present
   ansible.builtin.file:
     path: /usr/bin/nvim
     state: absent
   failed_when: false
   when: nvim_enable_tarball | bool
 
-- name: "TERM_NVIM_INSTALL - Create nvim symlink"
+- name: Symlink nvim into /usr/local/bin
   ansible.builtin.file:
     src: /usr/share/mps/tools/nvim/nvim-linux-x86_64/bin/nvim
     dest: /usr/local/bin/nvim

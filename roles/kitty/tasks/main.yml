@@ -1,6 +1,6 @@
 ---
-- name: "TERM_KITTY_MAIN - Install system packages"
+- name: Install kitty package
   ansible.builtin.include_tasks: install.yml
 
-- name: "TERM_KITTY_MAIN - Configure per-user kitty"
+- name: Configure per-user kitty dotfiles
   ansible.builtin.include_tasks: configure.yml

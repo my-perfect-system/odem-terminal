@@ -1,5 +1,5 @@
 ---
-- name: "TERM_VIM_INSTALL - Install vim-nox and plugins"
+- name: Install vim-nox and addon packages
   ansible.builtin.package:
     name:
       - vim-nox
@@ -17,7 +17,7 @@
     state: present
   when: vim_enable_vim_nox | bool
 
-- name: "TERM_VIM_INSTALL - Install lua packages"
+- name: Install lua development packages
   ansible.builtin.package:
     name:
       - liblua5.3-dev
@@ -27,7 +27,7 @@
     state: present
   when: vim_enable_lua | bool
 
-- name: "TERM_VIM_INSTALL - Install xclip"
+- name: Install xclip package
   ansible.builtin.package:
     name: xclip
     state: present

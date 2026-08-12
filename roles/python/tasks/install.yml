@@ -1,5 +1,5 @@
 ---
-- name: "TERM_PYTHON_INSTALL - Install Python system packages"
+- name: Install python3 base packages
   ansible.builtin.package:
     name:
       - python3

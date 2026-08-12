@@ -1,11 +1,11 @@
 ---
-- name: "TERM_SKELETONS_INSTALL - Create /etc/mps/skeletons"
+- name: Ensure /etc/mps/skeletons directory exists
   ansible.builtin.file:
     path: /etc/mps/skeletons
     state: directory
     mode: "0755"
 
-- name: "TERM_SKELETONS_INSTALL - Copy skeleton templates"
+- name: Deploy skeleton files to /etc/mps/skeletons
   ansible.builtin.copy:
     src: "{{ role_path }}/files/skeletons/"
     dest: /etc/mps/skeletons/

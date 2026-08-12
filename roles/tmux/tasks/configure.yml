@@ -1,5 +1,5 @@
 ---
-- name: "TERM_TMUX_CONFIGURE - Deploy .config/tmux config"
+- name: Deploy per-user tmux configuration tree
   ansible.builtin.copy:
     src: "{{ role_path }}/files/dotfiles/.config/tmux/"
     dest: "{{ entity.home }}/.config/tmux/"
@@ -15,7 +15,7 @@
     - entity.user_roles.terminal_tmux | default(false)
     - entity.state == 'present'
 
-- name: "TERM_TMUX_CONFIGURE - Deploy .config/tmuxinator config"
+- name: Deploy per-user tmuxinator configuration tree
   ansible.builtin.copy:
     src: "{{ role_path }}/files/dotfiles/.config/tmuxinator/"
     dest: "{{ entity.home }}/.config/tmuxinator/"

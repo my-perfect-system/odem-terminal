@@ -1,6 +1,6 @@
 ---
-- name: "TERM_BASH_MAIN - Install system packages"
+- name: Install bash packages
   ansible.builtin.include_tasks: install.yml
 
-- name: "TERM_BASH_MAIN - Configure per-user bash"
+- name: Configure per-user bash dotfiles
   ansible.builtin.include_tasks: configure.yml

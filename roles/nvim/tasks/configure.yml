@@ -1,5 +1,5 @@
 ---
-- name: "TERM_NVIM_CONFIGURE - Create .venvs directory"
+- name: Ensure per-user .venvs directory exists
   ansible.builtin.file:
     path: "{{ entity.home }}/.venvs"
     state: directory
@@ -14,7 +14,7 @@
     - entity.user_roles.terminal_nvim | default(false)
     - entity.state == 'present'
 
-- name: "TERM_NVIM_CONFIGURE - Create nvim Python venv"
+- name: Create per-user nvim python venv
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} python3 -m venv "{{ entity.home }}/.venvs/nvim"
     creates: "{{ entity.home }}/.venvs/nvim"
@@ -26,7 +26,7 @@
     - entity.user_roles.terminal_nvim | default(false)
     - entity.state == 'present'
 
-- name: "TERM_NVIM_CONFIGURE - Install pip packages into nvim venv"
+- name: Install nvim python packages into venv
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.venvs/nvim/bin/pip" install ruff-lsp debugpy pynvim
     creates: "{{ entity.home }}/.venvs/nvim/bin/ruff-lsp"
@@ -38,7 +38,7 @@
     - entity.user_roles.terminal_nvim | default(false)
     - entity.state == 'present'
 
-- name: "TERM_NVIM_CONFIGURE - Deploy .config/nvim/"
+- name: Deploy per-user nvim configuration tree
   ansible.builtin.copy:
     src: "{{ role_path }}/files/dotfiles/.config/nvim/"
     dest: "{{ entity.home }}/.config/nvim/"
@@ -54,7 +54,7 @@
     - entity.user_roles.terminal_nvim | default(false)
     - entity.state == 'present'
 
-- name: "TERM_NVIM_CONFIGURE - Create .config/nvim-session/ directory"
+- name: Ensure per-user nvim-session directory exists
   ansible.builtin.file:
     path: "{{ entity.home }}/.config/nvim-session/"
     state: directory
@@ -69,7 +69,7 @@
     - entity.user_roles.terminal_nvim | default(false)
     - entity.state == 'present'
 
-- name: "TERM_NVIM_CONFIGURE - Fix ownership of .venvs and .config/nvim-session"
+- name: Ensure .venvs and .config/nvim-session directories exist
   ansible.builtin.file:
     path: "{{ item.0.home }}/{{ item.1 }}"
     state: directory

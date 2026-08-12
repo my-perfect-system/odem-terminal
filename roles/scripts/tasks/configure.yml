@@ -1,5 +1,5 @@
 ---
-- name: "TERM_SCRIPTS_CONFIGURE - Create ~/.local/bin for each user"
+- name: Ensure per-user .local/bin directory exists
   ansible.builtin.file:
     path: "{{ entity.home }}/.local/bin"
     state: directory
@@ -14,7 +14,7 @@
     - entity.user_roles.terminal_scripts | default(false)
     - entity.state == 'present'
 
-- name: "TERM_SCRIPTS_CONFIGURE - Copy scripts to ~/.local/bin"
+- name: Deploy per-user helper scripts
   ansible.builtin.copy:
     src: "{{ role_path }}/files/scripts/"
     dest: "{{ entity.home }}/.local/bin/"
@@ -30,7 +30,7 @@
     - entity.user_roles.terminal_scripts | default(false)
     - entity.state == 'present'
 
-- name: "TERM_SCRIPTS_CONFIGURE - Fix ownership of ~/.local/bin"
+- name: Ensure correct permissions on per-user .local/bin tree
   ansible.builtin.file:
     path: "{{ entity.home }}/.local/bin"
     state: directory

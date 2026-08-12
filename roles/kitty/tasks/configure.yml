@@ -1,5 +1,5 @@
 ---
-- name: "TERM_KITTY_CONFIGURE - Deploy kitty config"
+- name: Deploy per-user kitty configuration tree
   ansible.builtin.copy:
     src: "{{ role_path }}/files/dotfiles/.config/kitty/"
     dest: "{{ entity.home }}/.config/kitty/"

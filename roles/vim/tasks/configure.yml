@@ -1,5 +1,5 @@
 ---
-- name: "TERM_VIM_CONFIGURE - Deploy .vimrc"
+- name: Deploy per-user .vimrc
   ansible.builtin.copy:
     src: "{{ role_path }}/files/dotfiles/.vimrc"
     dest: "{{ entity.home }}/.vimrc"
@@ -14,7 +14,7 @@
     - entity.user_roles.terminal_vim | default(false)
     - entity.state == 'present'
 
-- name: "TERM_VIM_CONFIGURE - Deploy .NERDTreeBookmarks"
+- name: Deploy per-user .NERDTreeBookmarks
   ansible.builtin.copy:
     src: "{{ role_path }}/files/dotfiles/.NERDTreeBookmarks"
     dest: "{{ entity.home }}/.NERDTreeBookmarks"

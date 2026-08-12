@@ -1,5 +1,5 @@
 ---
-- name: "TERM_RUST_CONFIGURE - Create .rustup directory"
+- name: Ensure per-user .rustup directory exists
   ansible.builtin.file:
     path: "{{ entity.home }}/.rustup"
     state: directory
@@ -14,7 +14,7 @@
     - entity.user_roles.terminal_rust | default(false)
     - entity.state == 'present'
 
-- name: "TERM_RUST_CONFIGURE - Create .cargo directory"
+- name: Ensure per-user .cargo directory exists
   ansible.builtin.file:
     path: "{{ entity.home }}/.cargo"
     state: directory
@@ -29,7 +29,7 @@
     - entity.user_roles.terminal_rust | default(false)
     - entity.state == 'present'
 
-- name: "TERM_RUST_CONFIGURE - Install rustup for each user"
+- name: Install rustup per user
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} /usr/share/mps/tools/rustup/rustup.sh -y --no-modify-path
     creates: "{{ entity.home }}/.cargo/bin/rustc"
@@ -41,7 +41,7 @@
     - entity.user_roles.terminal_rust | default(false)
     - entity.state == 'present'
 
-- name: "TERM_RUST_CONFIGURE - Remove incomplete toolchains"
+- name: Remove per-user toolchains for clean reinstall
   ansible.builtin.file:
     path: "{{ entity.home }}/.rustup/toolchains"
     state: absent
@@ -51,7 +51,7 @@
     label: "{{ entity.name }}"
   when: rust_enable_toolchain_reinstall | bool
 
-- name: "TERM_RUST_CONFIGURE - Set default rust toolchain"
+- name: Set rustup default toolchain to stable
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/rustup" default stable
   loop: "{{ identity_users_resolved }}"
@@ -63,7 +63,7 @@
     - entity.state == 'present'
   changed_when: false
 
-- name: "TERM_RUST_CONFIGURE - Add cargo bin to PATH in .bashrc"
+- name: Add cargo/bin to PATH in .bashrc
   ansible.builtin.lineinfile:
     path: "{{ entity.home }}/.bashrc"
     line: 'export PATH="$PATH:$HOME/.cargo/bin"'
@@ -79,7 +79,7 @@
     - entity.user_roles.terminal_rust | default(false)
     - entity.state == 'present'
 
-- name: "TERM_RUST_CONFIGURE - Source cargo env in .bashrc"
+- name: Source cargo env in .bashrc
   ansible.builtin.lineinfile:
     path: "{{ entity.home }}/.bashrc"
     line: 'source "$HOME/.cargo/env"'
@@ -95,7 +95,7 @@
     - entity.user_roles.terminal_rust | default(false)
     - entity.state == 'present'
 
-- name: "TERM_RUST_CONFIGURE - Fix ownership of .rustup and .cargo"
+- name: Ensure .rustup and .cargo directories have correct ownership
   ansible.builtin.file:
     path: "{{ item.0.home }}/{{ item.1 }}"
     state: directory

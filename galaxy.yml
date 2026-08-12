@@ -21,6 +21,8 @@ documentation: https://github.com/my-perfect-system/mps-terminal
 homepage: https://github.com/my-perfect-system/mps-terminal
 issues: https://github.com/my-perfect-system/mps-terminal/issues
 build_ignore:
+  .ansible-lint
+  .yamllint
   - .git
   - .github
   - .gitignore

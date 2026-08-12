@@ -1,6 +1,64 @@
 ---
-- name: Install vim packages
-  ansible.builtin.include_tasks: install.yml
+- name: Install vim-nox and addon packages
+  ansible.builtin.package:
+    name:
+      - vim-nox
+      - vim-addon-manager
+      - vim-airline
+      - vim-gruvbox
+      - vim-ale
+      - vim-autopep8
+      - vim-ctrlp
+      - vim-fugitive
+      - vim-gitgutter
+      - vim-snippets
+      - vim-syntastic
+      - vim-youcompleteme
+    state: present
+  when: vim_enable_vim_nox | bool
 
-- name: Configure per-user vim dotfiles
-  ansible.builtin.include_tasks: configure.yml
+- name: Install lua development packages
+  ansible.builtin.package:
+    name:
+      - liblua5.3-dev
+      - liblua5.1-dev
+      - lua5.1
+      - lua5.3
+    state: present
+  when: vim_enable_lua | bool
+
+- name: Install xclip package
+  ansible.builtin.package:
+    name: xclip
+    state: present
+  when: vim_enable_xclip | bool
+
+- name: Deploy per-user .vimrc
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/dotfiles/.vimrc"
+    dest: "{{ entity.home }}/.vimrc"
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0600"
+  loop: "{{ identity_users_resolved }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_vim | default(false)
+    - entity.state == 'present'
+
+- name: Deploy per-user .NERDTreeBookmarks
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/dotfiles/.NERDTreeBookmarks"
+    dest: "{{ entity.home }}/.NERDTreeBookmarks"
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0600"
+  loop: "{{ identity_users_resolved }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_vim | default(false)
+    - entity.state == 'present'

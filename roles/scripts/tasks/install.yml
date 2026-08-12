@@ -1,5 +1,0 @@
----
-- name: Skip system install for scripts role
-  ansible.builtin.debug:
-    msg: "scripts role has no system install step"
-  when: false

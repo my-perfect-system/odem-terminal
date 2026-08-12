@@ -1,6 +1,47 @@
 ---
-- name: Skip system install for scripts role
-  ansible.builtin.include_tasks: install.yml
+- name: Ensure per-user .local/bin directory exists
+  ansible.builtin.file:
+    path: "{{ entity.home }}/.local/bin"
+    state: directory
+    mode: "0700"
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+  loop: "{{ identity_users_resolved }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_scripts | default(false)
+    - entity.state == 'present'
 
-- name: Configure per-user scripts directory
-  ansible.builtin.include_tasks: configure.yml
+- name: Deploy per-user helper scripts
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/scripts/"
+    dest: "{{ entity.home }}/.local/bin/"
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0700"
+    directory_mode: "0700"
+  loop: "{{ identity_users_resolved }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_scripts | default(false)
+    - entity.state == 'present'
+
+- name: Ensure correct permissions on per-user .local/bin tree
+  ansible.builtin.file:
+    path: "{{ entity.home }}/.local/bin"
+    state: directory
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0700"
+    recurse: true
+  loop: "{{ identity_users_resolved }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_scripts | default(false)
+    - entity.state == 'present'

@@ -1,3 +1,13 @@
 ---
-- name: Deploy system-wide skeleton files
-  ansible.builtin.include_tasks: install.yml
+- name: Ensure /etc/mps/skeletons directory exists
+  ansible.builtin.file:
+    path: /etc/mps/skeletons
+    state: directory
+    mode: "0755"
+
+- name: Deploy skeleton files to /etc/mps/skeletons
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/skeletons/"
+    dest: /etc/mps/skeletons/
+    mode: "0644"
+    directory_mode: "0755"

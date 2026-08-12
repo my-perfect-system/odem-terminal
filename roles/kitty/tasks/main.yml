@@ -1,6 +1,28 @@
 ---
 - name: Install kitty package
-  ansible.builtin.include_tasks: install.yml
+  ansible.builtin.package:
+    name: kitty
+    state: present
 
-- name: Configure per-user kitty dotfiles
-  ansible.builtin.include_tasks: configure.yml
+- name: Set kitty as x-terminal-emulator alternative
+  ansible.builtin.command:
+    cmd: update-alternatives --set x-terminal-emulator /usr/bin/kitty
+  changed_when: false
+  failed_when: false
+  when: kitty_enable_alternatives | bool
+
+- name: Deploy per-user kitty configuration tree
+  ansible.builtin.copy:
+    src: "{{ role_path }}/files/dotfiles/.config/kitty/"
+    dest: "{{ entity.home }}/.config/kitty/"
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0600"
+    directory_mode: "0700"
+  loop: "{{ identity_users_resolved }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_kitty | default(false)
+    - entity.state == 'present'

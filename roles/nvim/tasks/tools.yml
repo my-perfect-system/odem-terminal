@@ -28,7 +28,7 @@
     group: "{{ item.0.group | default(item.0.name) }}"
     mode: "0700"
     remote_src: true
-  loop: "{{ nvim_users_present | product(['yazi', 'ya']) | list }}"
+  loop: "{{ identity_users_present | product(['yazi', 'ya']) | list }}"
   loop_control:
     label: "{{ item.0.name }}/{{ item.1 }}"
   when: nvim_enable_yazi | bool
@@ -46,7 +46,7 @@
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/cargo" install --locked fd-find
     creates: "{{ entity.home }}/.cargo/bin/fd"
-  loop: "{{ nvim_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -56,7 +56,7 @@
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/cargo" install --locked tree-sitter-cli
     creates: "{{ entity.home }}/.cargo/bin/tree-sitter"
-  loop: "{{ nvim_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"

@@ -6,10 +6,13 @@
     mode: "0700"
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
-  loop: "{{ scripts_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_scripts | default(false)
+    - entity.state == 'present'
 
 - name: "TERM_SCRIPTS_CONFIGURE - Copy scripts to ~/.local/bin"
   ansible.builtin.copy:
@@ -19,10 +22,13 @@
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0700"
     directory_mode: "0700"
-  loop: "{{ scripts_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_scripts | default(false)
+    - entity.state == 'present'
 
 - name: "TERM_SCRIPTS_CONFIGURE - Fix ownership of ~/.local/bin"
   ansible.builtin.file:
@@ -32,7 +38,10 @@
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0700"
     recurse: true
-  loop: "{{ scripts_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_scripts | default(false)
+    - entity.state == 'present'

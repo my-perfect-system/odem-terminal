@@ -7,10 +7,13 @@
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
     directory_mode: "0700"
-  loop: "{{ tmux_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_tmux | default(false)
+    - entity.state == 'present'
 
 - name: "TERM_TMUX_CONFIGURE - Deploy .config/tmuxinator config"
   ansible.builtin.copy:
@@ -20,7 +23,10 @@
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
     directory_mode: "0700"
-  loop: "{{ tmux_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_tmux | default(false)
+    - entity.state == 'present'

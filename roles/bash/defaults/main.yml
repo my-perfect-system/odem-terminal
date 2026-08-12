@@ -1,6 +1,4 @@
 ---
-users_catalog: {}  # noqa var-naming[no-role-prefix]
-users_list: []  # noqa var-naming[no-role-prefix]
 bash_enable_bash_completion: true
 bash_enable_fun_packages: true
 bash_fun_packages:

@@ -6,10 +6,13 @@
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
-  loop: "{{ bash_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_bash | default(false)
+    - entity.state == 'present'
 
 - name: "TERM_BASH_CONFIGURE - Deploy .config/bashrc/ directory"
   ansible.builtin.copy:
@@ -19,18 +22,24 @@
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
     directory_mode: "0700"
-  loop: "{{ bash_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_bash | default(false)
+    - entity.state == 'present'
 
 - name: "TERM_BASH_CONFIGURE - Check for .bash_logout"
   ansible.builtin.stat:
     path: "{{ entity.home }}/.bash_logout"
-  loop: "{{ bash_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_bash | default(false)
+    - entity.state == 'present'
   register: bash_logout_stat
 
 - name: "TERM_BASH_CONFIGURE - Copy .bash_logout to .config/bashrc/ if not already present"
@@ -51,34 +60,46 @@
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_history"
     state: absent
-  loop: "{{ bash_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_bash | default(false)
+    - entity.state == 'present'
 
 - name: "TERM_BASH_CONFIGURE - Delete stale .bash_logout"
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_logout"
     state: absent
-  loop: "{{ bash_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_bash | default(false)
+    - entity.state == 'present'
 
 - name: "TERM_BASH_CONFIGURE - Delete stale .bashrc_aliases"
   ansible.builtin.file:
     path: "{{ entity.home }}/.bashrc_aliases"
     state: absent
-  loop: "{{ bash_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_bash | default(false)
+    - entity.state == 'present'
 
 - name: "TERM_BASH_CONFIGURE - Delete stale .bash_aliases"
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_aliases"
     state: absent
-  loop: "{{ bash_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_bash | default(false)
+    - entity.state == 'present'

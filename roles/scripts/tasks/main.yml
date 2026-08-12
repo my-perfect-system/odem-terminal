@@ -1,7 +1,4 @@
 ---
-- name: "TERM_SCRIPTS_MAIN - Resolve users"
-  ansible.builtin.include_tasks: resolve.yml
-
 - name: "TERM_SCRIPTS_MAIN - Run install tasks"
   ansible.builtin.include_tasks: install.yml
 

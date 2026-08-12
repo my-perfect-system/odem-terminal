@@ -6,10 +6,13 @@
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
-  loop: "{{ vim_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_vim | default(false)
+    - entity.state == 'present'
 
 - name: "TERM_VIM_CONFIGURE - Deploy .NERDTreeBookmarks"
   ansible.builtin.copy:
@@ -18,7 +21,10 @@
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
-  loop: "{{ vim_users_present }}"
+  loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_vim | default(false)
+    - entity.state == 'present'

@@ -1,7 +1,4 @@
 ---
-- name: "TERM_TMUX_MAIN - Resolve users"
-  ansible.builtin.include_tasks: resolve.yml
-
 - name: "TERM_TMUX_MAIN - Install system packages"
   ansible.builtin.include_tasks: install.yml
 

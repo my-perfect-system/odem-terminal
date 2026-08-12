@@ -1,5 +1,3 @@
 ---
 
-users_catalog: {}  # noqa var-naming[no-role-prefix]
-users_list: []  # noqa var-naming[no-role-prefix]
 rust_enable_toolchain_reinstall: false

@@ -19,6 +19,15 @@
     state: present
   when: bash_enable_fun_packages | bool and bash_fun_packages | length > 0
 
+- name: Check if repo directory exists
+  ansible.builtin.file:
+    path: "{{ bash_repos_dir }}"
+    state: directory
+    mode: "0777"
+    owner: "root"
+    group: "root"
+
+
 - name: Check if mps-bash directory exists
   ansible.builtin.stat:
     path: "{{ bash_repos_dir }}/mps-bash"

@@ -1,18 +1,19 @@
 ---
 
 # Feature toggles — naming pattern: <rolename>_enable_<feature>
-
 bash_enable_bash_completion: true
-
 bash_enable_fun_packages: true
-
 bash_enable_aliases: true
 
 # Regular configuration
-
 bash_fun_packages:
   - cowsay
   - figlet
   - fortune-mod
   - fortunes-min
   - cmatrix
+
+bash_repo: "https://github.com/my-perfect-system/mps-bash-aliases.git"
+bash_repos_dir: "/srv/repo"
+bash_version: "main"
+

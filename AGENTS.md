@@ -28,7 +28,7 @@ python, rust, scripts, skeletons. Mostly per-user (filtered via
 
 ## Conventions
 
-- All per-user loops use `loop: "{{ identity_users_resolved | odem_filter_users('terminal_<x>') }}"`.
+- All per-user loops use `loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_<x>') }}"`.
 - `bash` and `python` and `rust` and `nvim` are full single-file `tasks/main.yml` (no install/configure/tools sub-step).
 - `vim` and `tmux` and `kitty` and `fonts` and `scripts` and `skeletons` are single-file roles (small enough).
 - Toggle variables prefixed `bash_enable_*`, `nvim_enable_*`, `rust_enable_*`, `vim_enable_*`, `kitty_enable_*` — gate individual tasks.

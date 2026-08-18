@@ -33,10 +33,43 @@
     state: present
   when: vim_enable_xclip | bool
 
+- name: Check if mps-vim directory exists
+  ansible.builtin.stat:
+    path: "{{ vim_repos_dir }}/mps-vim"
+  register: vim_repo_dir
+
+- name: Check if mps-vim is a Git repository
+  ansible.builtin.stat:
+    path: "{{ vim_repos_dir }}/mps-vim/.git"
+  register: vim_git_dir
+  when: vim_repo_dir.stat.exists
+
+- name: Clone mps-vim repository
+  ansible.builtin.git:
+    repo: "{{ vim_repo }}"
+    dest: "{{ vim_repos_dir }}/mps-vim"
+    version: "{{ vim_version }}"
+    force: true
+  become: true
+  when: not vim_repo_dir.stat.exists
+
+- name: Pull mps-vim repository
+  ansible.builtin.git:
+    repo: "{{ vim_repo }}"
+    dest: "{{ vim_repos_dir }}/mps-vim"
+    version: "{{ vim_version }}"
+    force: true
+    update: true
+  become: true
+  when:
+    - vim_repo_dir.stat.exists
+    - vim_git_dir.stat.exists
+
 - name: Deploy per-user .vimrc
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/dotfiles/.vimrc"
+    src: "{{ vim_repos_dir }}/mps-vim/.vimrc"
     dest: "{{ entity.home }}/.vimrc"
+    remote_src: true
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
@@ -50,8 +83,9 @@
 
 - name: Deploy per-user .NERDTreeBookmarks
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/dotfiles/.NERDTreeBookmarks"
+    src: "{{ vim_repos_dir }}/mps-vim/.NERDTreeBookmarks"
     dest: "{{ entity.home }}/.NERDTreeBookmarks"
+    remote_src: true
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"

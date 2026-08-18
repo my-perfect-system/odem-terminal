@@ -19,6 +19,38 @@
     state: present
   when: bash_enable_fun_packages | bool and bash_fun_packages | length > 0
 
+- name: Check if mps-bash directory exists
+  ansible.builtin.stat:
+    path: "{{ bash_repos_dir }}/mps-bash"
+  register: bash_repo_dir
+
+- name: Check if mps-bash is a Git repository
+  ansible.builtin.stat:
+    path: "{{ bash_repos_dir }}/mps-bash/.git"
+  register: bash_git_dir
+  when: bash_repo_dir.stat.exists
+
+- name: Clone mps-bash repository
+  ansible.builtin.git:
+    repo: "{{ bash_repo }}"
+    dest: "{{ bash_repos_dir }}/mps-bash"
+    version: "{{ bash_version }}"
+    force: true
+  become: true
+  when: not bash_repo_dir.stat.exists
+
+- name: Pull mps-bash repository
+  ansible.builtin.git:
+    repo: "{{ bash_repo }}"
+    dest: "{{ bash_repos_dir }}/mps-bash"
+    version: "{{ bash_version }}"
+    force: true
+    update: true
+  become: true
+  when:
+    - bash_repo_dir.stat.exists
+    - bash_git_dir.stat.exists
+
 - name: Ensure /etc/bash_aliases.d exists when aliases enabled
   ansible.builtin.file:
     path: /etc/bash_aliases.d
@@ -28,10 +60,17 @@
 
 - name: Deploy system bash aliases when enabled
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/etc/bash_aliases.d/"
+    src: "{{ bash_repos_dir }}/mps-bash-aliases/"
     dest: /etc/bash_aliases.d/
+    remote_src: true
     mode: "0644"
     directory_mode: true
+  when: bash_enable_aliases | bool
+
+- name: Remove .git dir
+  ansible.builtin.file:
+    path: /etc/bash_aliases.d/.git
+    state: absent
   when: bash_enable_aliases | bool
 
 # Per-user configure
@@ -42,7 +81,7 @@
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -55,7 +94,7 @@
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
     directory_mode: "0700"
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -63,7 +102,7 @@
 - name: Check for legacy .bash_logout per user
   ansible.builtin.stat:
     path: "{{ entity.home }}/.bash_logout"
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -87,7 +126,7 @@
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_history"
     state: absent
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -96,7 +135,7 @@
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_logout"
     state: absent
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -105,7 +144,7 @@
   ansible.builtin.file:
     path: "{{ entity.home }}/.bashrc_aliases"
     state: absent
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -114,7 +153,7 @@
   ansible.builtin.file:
     path: "{{ entity.home }}/.bash_aliases"
     state: absent
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_bash') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_bash') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"

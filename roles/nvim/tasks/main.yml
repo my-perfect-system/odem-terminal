@@ -69,7 +69,7 @@
   ansible.builtin.file:
     path: /usr/bin/nvim
     state: absent
-    failed_when: false
+    # failed_when: false
   when: nvim_enable_tarball | bool
 
 - name: Symlink nvim into /usr/local/bin
@@ -87,7 +87,7 @@
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0700"
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -96,7 +96,7 @@
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} python3 -m venv "{{ entity.home }}/.venvs/nvim"
     creates: "{{ entity.home }}/.venvs/nvim"
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -105,20 +105,62 @@
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.venvs/nvim/bin/pip" install ruff-lsp debugpy pynvim
     creates: "{{ entity.home }}/.venvs/nvim/bin/ruff-lsp"
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
 
+- name: Check if mps-nvim directory exists
+  ansible.builtin.stat:
+    path: "{{ nvim_repos_dir }}/mps-nvim"
+  register: nvim_repo_dir
+
+- name: Check if mps-nvim is a Git repository
+  ansible.builtin.stat:
+    path: "{{ nvim_repos_dir }}/mps-nvim/.git"
+  register: nvim_git_dir
+  when: nvim_repo_dir.stat.exists
+
+- name: Clone mps-nvim repository
+  ansible.builtin.git:
+    repo: "{{ nvim_repo }}"
+    dest: "{{ nvim_repos_dir }}/mps-nvim"
+    version: "{{ nvim_version }}"
+    force: true
+  become: true
+  when: not nvim_repo_dir.stat.exists
+
+- name: Pull mps-nvim repository
+  ansible.builtin.git:
+    repo: "{{ nvim_repo }}"
+    dest: "{{ nvim_repos_dir }}/mps-nvim"
+    version: "{{ nvim_version }}"
+    force: true
+    update: true
+  become: true
+  when:
+    - nvim_repo_dir.stat.exists
+    - nvim_git_dir.stat.exists
+
 - name: Deploy per-user nvim configuration tree
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/dotfiles/.config/nvim/"
+    src: "{{ nvim_repos_dir }}/mps-nvim/"
     dest: "{{ entity.home }}/.config/nvim/"
+    remote_src: true
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0600"
     directory_mode: "0700"
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_nvim') }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
+- name: Remove per-user nvim .git dir
+  ansible.builtin.file:
+    path: "{{ nvim_repos_dir }}/mps-nvim/.git"
+    state: absent
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -130,7 +172,7 @@
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0700"
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -177,7 +219,7 @@
     group: "{{ item.0.group | default(item.0.name) }}"
     mode: "0700"
     remote_src: true
-  loop: "{{ identity_users_present | product(['yazi', 'ya']) | list }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_nvim') | product(['yazi', 'ya']) | list }}"
   loop_control:
     label: "{{ item.0.name }}/{{ item.1 }}"
   when: nvim_enable_yazi | bool
@@ -195,7 +237,7 @@
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/cargo" install --locked fd-find
     creates: "{{ entity.home }}/.cargo/bin/fd"
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"
@@ -205,7 +247,7 @@
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/cargo" install --locked tree-sitter-cli
     creates: "{{ entity.home }}/.cargo/bin/tree-sitter"
-  loop: "{{ identity_users_resolved | odem_filter_users('terminal_nvim') }}"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_nvim') }}"
   loop_control:
     loop_var: entity
     label: "{{ entity.name }}"

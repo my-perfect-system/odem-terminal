@@ -1,4 +1,37 @@
 ---
+
+- name: Check if mps-scripts directory exists
+  ansible.builtin.stat:
+    path: "{{ scripts_repos_dir }}/mps-scripts"
+  register: scripts_repo_dir
+
+- name: Check if mps-scripts is a Git repository
+  ansible.builtin.stat:
+    path: "{{ scripts_repos_dir }}/mps-scripts/.git"
+  register: scripts_git_dir
+  when: scripts_repo_dir.stat.exists
+
+- name: Clone mps-scripts repository
+  ansible.builtin.git:
+    repo: "{{ scripts_repo }}"
+    dest: "{{ scripts_repos_dir }}/mps-scripts"
+    version: "{{ scripts_version }}"
+    force: true
+  become: true
+  when: not scripts_repo_dir.stat.exists
+
+- name: Pull mps-scripts repository
+  ansible.builtin.git:
+    repo: "{{ scripts_repo }}"
+    dest: "{{ scripts_repos_dir }}/mps-scripts"
+    version: "{{ scripts_version }}"
+    force: true
+    update: true
+  become: true
+  when:
+    - scripts_repo_dir.stat.exists
+    - scripts_git_dir.stat.exists
+
 - name: Ensure per-user .local/bin directory exists
   ansible.builtin.file:
     path: "{{ entity.home }}/.local/bin"
@@ -16,12 +49,25 @@
 
 - name: Deploy per-user helper scripts
   ansible.builtin.copy:
-    src: "{{ role_path }}/files/scripts/"
+    src: "{{ scripts_repos_dir }}/mps-scripts/scripts/"
     dest: "{{ entity.home }}/.local/bin/"
+    remote_src: true
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
     mode: "0700"
     directory_mode: "0700"
+  loop: "{{ identity_users_resolved }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+  when:
+    - entity.user_roles.terminal_scripts | default(false)
+    - entity.state == 'present'
+
+- name: Remove per-user .git dir
+  ansible.builtin.file:
+    path: "{{ scripts_repos_dir }}/mps-scripts/scripts/.git"
+    state: absent
   loop: "{{ identity_users_resolved }}"
   loop_control:
     loop_var: entity

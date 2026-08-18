@@ -64,7 +64,7 @@
 - name: Set rustup default toolchain to stable
   ansible.builtin.command:
     cmd: sudo -u {{ entity.name }} "{{ entity.home }}/.cargo/bin/rustup" default stable
-    changed_when: false
+    # changed_when: false
   loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_rust') }}"
   loop_control:
     loop_var: entity

@@ -28,30 +28,30 @@
     group: "root"
 
 
-- name: Check if mps-bash directory exists
+- name: Check if mps-bash-aliases directory exists
   ansible.builtin.stat:
-    path: "{{ bash_repos_dir }}/mps-bash"
+    path: "{{ bash_repos_dir }}/mps-bash-aliases"
   register: bash_repo_dir
 
-- name: Check if mps-bash is a Git repository
+- name: Check if mps-bash-aliases is a Git repository
   ansible.builtin.stat:
-    path: "{{ bash_repos_dir }}/mps-bash/.git"
+    path: "{{ bash_repos_dir }}/mps-bash-aliases/.git"
   register: bash_git_dir
   when: bash_repo_dir.stat.exists
 
-- name: Clone mps-bash repository
+- name: Clone mps-bash-aliases repository
   ansible.builtin.git:
     repo: "{{ bash_repo }}"
-    dest: "{{ bash_repos_dir }}/mps-bash"
+    dest: "{{ bash_repos_dir }}/mps-bash-aliases"
     version: "{{ bash_version }}"
     force: true
   become: true
   when: not bash_repo_dir.stat.exists
 
-- name: Pull mps-bash repository
+- name: Pull mps-bash-aliases repository
   ansible.builtin.git:
     repo: "{{ bash_repo }}"
-    dest: "{{ bash_repos_dir }}/mps-bash"
+    dest: "{{ bash_repos_dir }}/mps-bash-aliases"
     version: "{{ bash_version }}"
     force: true
     update: true

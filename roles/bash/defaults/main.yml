@@ -14,6 +14,6 @@ bash_fun_packages:
   - cmatrix
 
 bash_repo: "https://github.com/my-perfect-system/mps-bash-aliases.git"
-bash_repos_dir: "/srv/repo"
+bash_repos_dir: "/srv/repo/github/my-perfect-system"
 bash_version: "main"
 

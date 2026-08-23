@@ -61,6 +61,16 @@
   become: true
   when: not vim_repo_dir.stat.exists
 
+- name: Ensure permissions for target directory
+  ansible.builtin.file:
+    path: "{{ vim_repos_dir }}/mps-vim"
+    state: directory
+    owner: "root"
+    group: "{{ user_default_admin_group }}"
+    recurse: yes
+    mode: "2775"
+  become: true
+
 - name: Pull mps-vim repository
   ansible.builtin.git:
     repo: "{{ vim_repo }}"

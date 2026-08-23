@@ -60,6 +60,16 @@
     - bash_repo_dir.stat.exists
     - bash_git_dir.stat.exists
 
+- name: Ensure permissions for target directory
+  ansible.builtin.file:
+    path: "{{ bash_repos_dir }}/mps-bash-aliases"
+    state: directory
+    owner: "root"
+    group: "{{ user_default_admin_group }}"
+    recurse: yes
+    mode: "2775"
+  become: true
+
 - name: Ensure /etc/bash_aliases.d exists when aliases enabled
   ansible.builtin.file:
     path: /etc/bash_aliases.d

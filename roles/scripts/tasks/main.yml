@@ -27,6 +27,16 @@
   become: true
   when: not scripts_repo_dir.stat.exists
 
+- name: Ensure permissions for target directory
+  ansible.builtin.file:
+    path: "{{ scripts_repos_dir }}/mps-scripts"
+    state: directory
+    owner: "root"
+    group: "{{ user_default_admin_group }}"
+    recurse: yes
+    mode: "2775"
+  become: true
+
 - name: Pull mps-scripts repository
   ansible.builtin.git:
     repo: "{{ scripts_repo }}"

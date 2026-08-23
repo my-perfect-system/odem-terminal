@@ -140,6 +140,16 @@
   become: true
   when: not nvim_repo_dir.stat.exists
 
+- name: Ensure permissions for target directory
+  ansible.builtin.file:
+    path: "{{ nvim_repos_dir }}/mps-nvim"
+    state: directory
+    owner: "root"
+    group: "{{ user_default_admin_group }}"
+    recurse: yes
+    mode: "2775"
+  become: true
+
 - name: Pull mps-nvim repository
   ansible.builtin.git:
     repo: "{{ nvim_repo }}"

@@ -64,7 +64,9 @@
   ansible.builtin.file:
     path: /etc/bash_aliases.d
     state: directory
-    mode: "0755"
+    owner: "root"
+    group: "{{ user_default_admin_group }}"
+    mode: "0775"
   when: bash_enable_aliases | bool
 
 - name: Deploy system bash aliases when enabled
@@ -72,7 +74,9 @@
     src: "{{ bash_repos_dir }}/mps-bash-aliases/"
     dest: /etc/bash_aliases.d/
     remote_src: true
-    mode: "0644"
+    owner: "root"
+    group: "{{ user_default_admin_group }}"
+    mode: "0775"
     directory_mode: true
   when: bash_enable_aliases | bool
 
@@ -80,6 +84,15 @@
   ansible.builtin.file:
     path: /etc/bash_aliases.d/.git
     state: absent
+  when: bash_enable_aliases | bool
+
+- name: Ensure permissions for alias dir
+  ansible.builtin.file:
+    path: /etc/bash_aliases.d/
+    state: directory
+    owner: "root"
+    group: "{{ user_default_admin_group }}"
+    mode: "0775"
   when: bash_enable_aliases | bool
 
 # Per-user configure

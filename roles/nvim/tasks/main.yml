@@ -48,7 +48,9 @@
   ansible.builtin.file:
     path: /usr/share/mps/tools/nvim/
     state: directory
-    mode: "0755"
+    owner: "root"
+    group: "admin"
+    mode: "2775"
   when: nvim_enable_tarball | bool
 
 - name: Download nvim upstream tarball

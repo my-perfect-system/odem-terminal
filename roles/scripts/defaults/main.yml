@@ -1,5 +1,5 @@
 ---
 
 scripts_repo: "https://github.com/my-perfect-system/mps-scripts.git"
-scripts_repos_dir: "/srv/repo/github/my-perfect-system"
+scripts_repos_dir: "{{ common_default_repo_dir_mps }}"
 scripts_version: "main"

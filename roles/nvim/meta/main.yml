@@ -18,3 +18,5 @@ galaxy_info:
     - odem-terminal
 dependencies:
   - role: odem.base.identity
+  - role: odem.terminal.rust
+  - role: odem.terminal.python

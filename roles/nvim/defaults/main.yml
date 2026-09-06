@@ -12,5 +12,5 @@ nvim_enable_tree_sitter: true
 # Regular configuration
 nvim_yazi_version: "v26.5.6"
 nvim_repo: "https://github.com/my-perfect-system/mps-nvim.git"
-nvim_repos_dir: "{{ common_default_repo_dir_mps }}"
+nvim_repos_dir: "{{ identity_default_repo_dir_mps }}"
 nvim_version: "main"

@@ -1,0 +1,9 @@
+---
+# Fragment for the common → identity merge.
+# Compiles into changelogs/changelog.yaml at release time.
+minor_changes:
+  - |
+    Renamed the `common_default_repo_dir_mps` reference to
+    `identity_default_repo_dir_mps` in the `bash`, `vim`, `nvim`, and `scripts`
+    role defaults (the variable moved from the removed `odem.base.common` role
+    into `odem.base.identity`).

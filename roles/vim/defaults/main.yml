@@ -8,6 +8,6 @@ vim_enable_xclip: true
 
 # Regular config
 vim_repo: "https://github.com/my-perfect-system/mps-vim.git"
-vim_repos_dir: "{{ common_default_repo_dir_mps }}"
+vim_repos_dir: "{{ identity_default_repo_dir_mps }}"
 vim_version: "main"
 

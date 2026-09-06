@@ -15,6 +15,6 @@ bash_fun_packages:
   - fastfetch
 
 bash_repo: "https://github.com/my-perfect-system/mps-bash-aliases.git"
-bash_repos_dir: "{{ common_default_repo_dir_mps }}"
+bash_repos_dir: "{{ identity_default_repo_dir_mps }}"
 bash_version: "main"
 

@@ -1,6 +1,6 @@
 ---
 # System-level install
-- name: Install nvim apt dependencies
+- name: Install nvim dependencies (Debian)
   ansible.builtin.package:
     name:
       - lazygit
@@ -36,12 +36,25 @@
       - python3-neovim
       - python3-pynvim
     state: present
-  when: nvim_enable_apt_deps | bool
+  when:
+    - nvim_enable_deps | bool
+    - ansible_facts['os_family'] == 'Debian'
+
+- name: Install nvim dependencies via dnf CLI
+  ansible.builtin.command: >-
+    dnf install -y make gcc gcc-c++ gdb wget bzip2 curl lldb ncurses-devel ruby npm fzf
+    fd-find rr ripgrep shellcheck xclip xsel luarocks python3 python3-pip black pylint
+    pandoc python3-neovim
+  when:
+    - nvim_enable_deps | bool
+    - ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_nvim_deps
+  changed_when: "'Nothing to do' not in dnf_install_nvim_deps.stdout"
 
 - name: Install nvim npm tools globally
   ansible.builtin.command:
     cmd: npm install -g neovim vint luacheck
-    creates: /usr/lib/node_modules/neovim
+    creates: "{{ nvim_npm_global_root }}/neovim"
   when: nvim_enable_npm_tools | bool
 
 - name: Ensure nvim tarball target directory exists
@@ -162,6 +175,18 @@
     - nvim_repo_dir.stat.exists
     - nvim_git_dir.stat.exists
 
+- name: Ensure per-user nvim config directory exists
+  ansible.builtin.file:
+    path: "{{ entity.home }}/.config/nvim"
+    state: directory
+    owner: "{{ entity.name }}"
+    group: "{{ entity.group | default(entity.name) }}"
+    mode: "0700"
+  loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_nvim') }}"
+  loop_control:
+    loop_var: entity
+    label: "{{ entity.name }}"
+
 - name: Deploy per-user nvim configuration tree
   ansible.builtin.copy:
     src: "{{ nvim_repos_dir }}/mps-nvim/"
@@ -169,7 +194,9 @@
     remote_src: true
     owner: "{{ entity.name }}"
     group: "{{ entity.group | default(entity.name) }}"
-    mode: "0600"
+    # NOTE: with remote_src + directory src, `mode` is applied to the
+    # destination directory itself (not the files) — the dir is pre-created
+    # at 0700 above instead. directory_mode covers subdirectories.
     directory_mode: "0700"
   loop: "{{ identity_users_resolved | odem.base.odem_filter_users('terminal_nvim') }}"
   loop_control:

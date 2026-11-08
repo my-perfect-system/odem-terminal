@@ -1,23 +1,55 @@
 ---
 # System-level install
-- name: Install bash-completion when enabled
+- name: Install bash-completion when enabled (Debian)
   ansible.builtin.package:
     name: bash-completion
     state: present
-  when: bash_enable_bash_completion | bool
+  when:
+    - bash_enable_bash_completion | bool
+    - ansible_facts['os_family'] == 'Debian'
+
+- name: Install bash-completion via dnf CLI
+  ansible.builtin.command: dnf install -y bash-completion
+  when:
+    - bash_enable_bash_completion | bool
+    - ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_bash_completion
+  changed_when: "'Nothing to do' not in dnf_install_bash_completion.stdout"
 
   # System-level install
-- name: Install zoxide when enabled
+- name: Install zoxide when enabled (Debian)
   ansible.builtin.package:
     name: zoxide
     state: present
-  when: bash_enable_bash_completion | bool
+  when:
+    - bash_enable_bash_completion | bool
+    - ansible_facts['os_family'] == 'Debian'
 
-- name: Install bash fun packages when enabled
+- name: Install zoxide via dnf CLI
+  ansible.builtin.command: dnf install -y zoxide
+  when:
+    - bash_enable_bash_completion | bool
+    - ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_zoxide
+  changed_when: "'Nothing to do' not in dnf_install_zoxide.stdout"
+
+- name: Install bash fun packages when enabled (Debian)
   ansible.builtin.package:
     name: "{{ bash_fun_packages }}"
     state: present
-  when: bash_enable_fun_packages | bool and bash_fun_packages | length > 0
+  when:
+    - bash_enable_fun_packages | bool
+    - bash_fun_packages | length > 0
+    - ansible_facts['os_family'] == 'Debian'
+
+- name: Install bash fun packages via dnf CLI
+  ansible.builtin.command: "dnf install -y {{ bash_fun_packages_redhat | join(' ') }}"
+  when:
+    - bash_enable_fun_packages | bool
+    - bash_fun_packages_redhat | length > 0
+    - ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_fun_packages
+  changed_when: "'Nothing to do' not in dnf_install_fun_packages.stdout"
 
 - name: Check if repo directory exists
   ansible.builtin.file:

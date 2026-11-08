@@ -2,11 +2,11 @@ argument_specs:
   main:
     short_description: Configure vim dotfiles per user
     options:
-      vim_enable_vim_nox:
+      vim_enable_packages:
         type: bool
         required: false
         default: true
-        description: Install vim-nox and vim plugin packages
+        description: Install the vim package set (vim-nox + addons on Debian, vim-enhanced on Fedora)
       vim_enable_lua:
         type: bool
         required: false

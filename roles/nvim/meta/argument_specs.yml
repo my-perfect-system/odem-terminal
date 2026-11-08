@@ -2,13 +2,13 @@ argument_specs:
   main:
     short_description: Install and configure Neovim with dependencies
     description:
-    - Installs Neovim via tarball, apt dependencies, npm tools, and deploys per-user
-      config.
+    - Installs Neovim via tarball, distribution dependencies, npm tools, and deploys
+      per-user config.
     options:
-      nvim_enable_apt_deps:
+      nvim_enable_deps:
         type: bool
         default: true
-        description: Install apt dependencies for Neovim
+        description: Install Neovim system dependencies (per-family package lists)
       nvim_enable_npm_tools:
         type: bool
         default: true
@@ -31,9 +31,17 @@ argument_specs:
         type: bool
         required: false
         default: true
-        description: Install fd-find apt package
+        description: Install fd-find package
       nvim_enable_tree_sitter:
         type: bool
         required: false
         default: true
         description: Install tree-sitter-cli npm package
+      nvim_npm_global_root:
+        type: str
+        required: false
+        default: /usr/lib/node_modules
+        description: >-
+          npm global install root used for the creates: idempotency check of the
+          npm tools task (/usr/local/lib/node_modules on RedHat family,
+          /usr/lib/node_modules on Debian).

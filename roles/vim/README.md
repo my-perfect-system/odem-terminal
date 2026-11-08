@@ -13,7 +13,7 @@ Configure vim dotfiles per user
 | Variable | Default | Description |
 |---|---|---|
 | `vim_enable_lua` | `true` | Install lua development packages |
-| `vim_enable_vim_nox` | `true` | Install vim-nox and vim plugin packages |
+| `vim_enable_packages` | `true` | Install the vim package set (vim-nox + addons on Debian, vim-enhanced on Fedora) |
 | `vim_enable_xclip` | `true` | Install xclip package |
 
 ## Dependencies

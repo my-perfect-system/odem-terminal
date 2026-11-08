@@ -14,6 +14,14 @@ bash_fun_packages:
   - cmatrix
   - fastfetch
 
+# Fedora package names differ (no fortunes-min)
+bash_fun_packages_redhat:
+  - cowsay
+  - figlet
+  - fortune-mod
+  - cmatrix
+  - fastfetch
+
 bash_repo: "https://github.com/my-perfect-system/mps-bash-aliases.git"
 bash_repos_dir: "{{ identity_default_repo_dir_mps }}"
 bash_version: "main"

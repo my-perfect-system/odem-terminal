@@ -1,15 +1,24 @@
 ---
-- name: Install kitty package
+- name: Install kitty package (Debian)
   ansible.builtin.package:
     name: kitty
     state: present
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Install kitty package via dnf CLI
+  ansible.builtin.command: dnf install -y kitty
+  when: ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_kitty
+  changed_when: "'Nothing to do' not in dnf_install_kitty.stdout"
 
 - name: Set kitty as x-terminal-emulator alternative
   ansible.builtin.command:
     cmd: update-alternatives --set x-terminal-emulator /usr/bin/kitty
   changed_when: false
   failed_when: false
-  when: kitty_enable_alternatives | bool
+  when:
+    - kitty_enable_alternatives | bool
+    - ansible_facts['os_family'] == 'Debian'
 
 - name: Deploy per-user kitty configuration tree
   ansible.builtin.copy:

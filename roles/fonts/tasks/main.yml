@@ -1,18 +1,17 @@
 ---
-- name: Assert Debian 13 target
-  ansible.builtin.assert:
-    that:
-      - ansible_facts["distribution"] == "Debian"
-      - ansible_facts["distribution_major_version"] | int == 13
-    fail_msg: "This role supports Debian 13 (trixie) only"
-    quiet: true
-
-- name: Install fontconfig and unzip
+- name: Install fontconfig and unzip (Debian)
   ansible.builtin.package:
     name:
       - fontconfig
       - unzip
     state: present
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Install fontconfig and unzip via dnf CLI
+  ansible.builtin.command: dnf install -y fontconfig unzip
+  when: ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_fonts_deps
+  changed_when: "'Nothing to do' not in dnf_install_fonts_deps.stdout"
 
 - name: Ensure fonts directory exists
   ansible.builtin.file:

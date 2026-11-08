@@ -1,5 +1,5 @@
 ---
-- name: Install vim-nox and addon packages
+- name: Install vim and addon packages (Debian)
   ansible.builtin.package:
     name:
       - vim-nox
@@ -15,9 +15,19 @@
       - vim-syntastic
       - vim-youcompleteme
     state: present
-  when: vim_enable_vim_nox | bool
+  when:
+    - vim_enable_packages | bool
+    - ansible_facts['os_family'] == 'Debian'
 
-- name: Install lua development packages
+- name: Install vim packages via dnf CLI
+  ansible.builtin.command: dnf install -y vim-enhanced
+  when:
+    - vim_enable_packages | bool
+    - ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_vim
+  changed_when: "'Nothing to do' not in dnf_install_vim.stdout"
+
+- name: Install lua development packages (Debian)
   ansible.builtin.package:
     name:
       - liblua5.3-dev
@@ -25,13 +35,33 @@
       - lua5.1
       - lua5.3
     state: present
-  when: vim_enable_lua | bool
+  when:
+    - vim_enable_lua | bool
+    - ansible_facts['os_family'] == 'Debian'
 
-- name: Install xclip package
+- name: Install lua development packages via dnf CLI
+  ansible.builtin.command: dnf install -y lua lua-devel
+  when:
+    - vim_enable_lua | bool
+    - ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_lua
+  changed_when: "'Nothing to do' not in dnf_install_lua.stdout"
+
+- name: Install xclip package (Debian)
   ansible.builtin.package:
     name: xclip
     state: present
-  when: vim_enable_xclip | bool
+  when:
+    - vim_enable_xclip | bool
+    - ansible_facts['os_family'] == 'Debian'
+
+- name: Install xclip package via dnf CLI
+  ansible.builtin.command: dnf install -y xclip
+  when:
+    - vim_enable_xclip | bool
+    - ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_xclip
+  changed_when: "'Nothing to do' not in dnf_install_xclip.stdout"
 
 - name: Check if repo directory exists
   ansible.builtin.file:

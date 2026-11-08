@@ -1,9 +1,16 @@
 ---
 # System-level install
-- name: Install clang for cargo
+- name: Install clang for cargo (Debian)
   ansible.builtin.package:
     name: clang
     state: present
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Install clang for cargo via dnf CLI
+  ansible.builtin.command: dnf install -y clang
+  when: ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_clang
+  changed_when: "'Nothing to do' not in dnf_install_clang.stdout"
 
 - name: Ensure rustup tools directory exists
   ansible.builtin.file:

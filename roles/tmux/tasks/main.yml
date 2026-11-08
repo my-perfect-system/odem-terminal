@@ -1,10 +1,32 @@
 ---
-- name: Install tmux and tmuxinator
+- name: Install tmux and tmuxinator (Debian)
   ansible.builtin.package:
     name:
       - tmux
       - tmuxinator
     state: present
+  when: ansible_facts['os_family'] == 'Debian'
+
+- name: Install tmux via dnf CLI
+  ansible.builtin.command: dnf install -y tmux
+  when: ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_tmux
+  changed_when: "'Nothing to do' not in dnf_install_tmux.stdout"
+
+- name: Install rubygems for tmuxinator via dnf CLI
+  ansible.builtin.command: dnf install -y ruby rubygems
+  when: ansible_facts['os_family'] == 'RedHat'
+  register: dnf_install_rubygems
+  changed_when: "'Nothing to do' not in dnf_install_rubygems.stdout"
+
+- name: Install tmuxinator via gem
+  ansible.builtin.command: gem install tmuxinator --no-user-install
+  when: ansible_facts['os_family'] == 'RedHat'
+  register: gem_install_tmuxinator
+  changed_when: "'Successfully installed tmuxinator' in gem_install_tmuxinator.stdout"
+  failed_when: >-
+    gem_install_tmuxinator.rc != 0 and
+    'already installed' not in gem_install_tmuxinator.stderr
 
 - name: Deploy per-user tmux configuration tree
   ansible.builtin.copy:
